@@ -1,6 +1,6 @@
 # Cleaning decisions and log: all annual summary files
 
-Script: `clean_ita_data.py`  
+Script: `src/cleaning/clean_ita_data.py`
 Documented run: September 28, 2026
 
 ## Purpose
@@ -12,13 +12,13 @@ and preliminary eligibility checks are documented below for team review.
 
 ## How the script handles the files
 
-| Files in `raw/` | What happens |
+| Files below `data/raw/` | What happens |
 | --- | --- |
 | `ITA Data 2016.csv` through `ITA Data 2025.csv` | Each file is cleaned separately using the same rules, then its rows are added to one combined table. |
 | `Case Detail Data 2023.csv`, `2024.csv`, and `2025.csv` | Recognized from their columns and listed as skipped. Incident narratives need a separate cleaning process. |
 | Dictionary PDFs | Reference material; the script does not read or modify them. |
 
-The script reads CSVs directly inside `raw/`, checks their headers, and records
+The script recursively reads CSVs below `data/raw/`, checks their headers, and records
 their columns, row counts, and observed data types. It stops on an unrecognized
 CSV, missing required columns, or multiple summary files for the same year.
 One summary filename must contain one clear reporting year.
@@ -86,7 +86,7 @@ blank `naics_year` column. No other current source field was dropped.
 **Rows removed: 0. Duplicate rows removed: 0. Rows needing review: 44,729.**
 Warehouse totals count rows, not deduplicated establishments.
 
-## Files produced in `processed/`
+## Files produced in `data/processed/`
 
 | Output | Contains |
 | --- | --- |
@@ -100,4 +100,3 @@ Warehouse totals count rows, not deduplicated establishments.
 | `run_manifest.json` | Run status, source hashes, and script version hash. |
 
 The three data tables overlap; do not add their row counts together.
-

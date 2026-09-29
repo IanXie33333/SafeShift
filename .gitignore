@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# Local settings and secrets
+.env
+.env.*
+!.env.example
+
+# Generated and local data
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.duckdb
+*.duckdb.wal
+
+# Model and notebook artifacts
+.ipynb_checkpoints/
+*.pkl
+*.joblib
+
+# Tableau extracts and operating-system files
+*.hyper
+*.tfl
+*.tflx
+.DS_Store

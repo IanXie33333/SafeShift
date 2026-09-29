@@ -1,12 +1,12 @@
 # Cleaning log: OSHA annual summaries, 2016–2025
 
-**Run date:** September 28, 2026  
-**Script:** `clean_ita_data.py`  
+**Run date:** September 28, 2026
+**Script:** `src/cleaning/clean_ita_data.py`
 **Status:** Completed successfully
 
 ## Files processed
 
-Processed the ten `ITA Data [year].csv` summary files in `raw/`.
+Processed the ten `ITA Data [year].csv` summary files below `data/raw/`.
 The three case-detail files for 2023–2025 were listed as skipped because they
 contain individual incidents and require separate cleaning. Raw files were not
 edited. This run used the existing local files; no download or upload was performed.
@@ -40,7 +40,7 @@ They include repeated records and are not counts of unique establishments.
 - Kept IDs, ZIP codes, and category codes as text. Removed leading zeros from
   numeric establishment IDs and padded short numeric ZIPs to five digits.
 - Converted employee counts, hours, injury/illness counts, and days to numbers.
-  The precise output types are in `processed/data_dictionary.csv`.
+  The precise output types are in `data/processed/data_dictionary.csv`.
 - Added blank `naics_year` values for 2016–2022, where that field was absent.
   No NAICS version was guessed and no industry crosswalk was applied.
 - Added `dart_count` and `dart_rate`. DART count is days-away cases plus
@@ -62,7 +62,7 @@ were retained. Zero hours and employees were retained and flagged.
 
 Key missing inputs were **16 hours values**, **3 employee counts**,
 **3 days-away case counts**, and **3 transfer/restriction case counts**.
-Other column-level missingness is recorded in `processed/column_profile.csv`.
+Other column-level missingness is recorded in `data/processed/column_profile.csv`.
 
 DART stays blank if either component is missing. DART rate stays blank when
 DART is missing or hours are missing, zero, or invalid. Negative counts/hours
@@ -72,7 +72,7 @@ were not changed to positive values.
 
 **44,729 rows received at least one review flag.** Counts below overlap because
 one row can have several problems. This table lists the main findings; all checks
-and their counts are in `processed/quality_summary.csv`.
+and their counts are in `data/processed/quality_summary.csv`.
 
 | Finding | Affected rows |
 | --- | ---: |
@@ -107,14 +107,14 @@ modeling approval.
 
 ## Output files
 
-- `processed/summary_cleaned.csv`: all 3,189,050 standardized summary records.
-- `processed/warehouses_4931.csv`: 72,394 warehouse records.
-- `processed/rows_for_review.csv`: 44,729 flagged records.
-- `processed/inventory.csv`: per-file counts and available columns.
-- `processed/column_profile.csv`: original missingness and observed types.
-- `processed/quality_summary.csv`: counts for each quality check.
-- `processed/data_dictionary.csv`: definitions for the 42 output fields.
-- `processed/run_manifest.json`: completion status and source/script hashes.
+- `data/processed/summary_cleaned.csv`: all 3,189,050 standardized summary records.
+- `data/processed/warehouses_4931.csv`: 72,394 warehouse records.
+- `data/processed/rows_for_review.csv`: 44,729 flagged records.
+- `data/processed/inventory.csv`: per-file counts and available columns.
+- `data/processed/column_profile.csv`: original missingness and observed types.
+- `data/processed/quality_summary.csv`: counts for each quality check.
+- `data/processed/data_dictionary.csv`: definitions for the 42 output fields.
+- `data/processed/run_manifest.json`: completion status and source/script hashes.
 
 The warehouse and review files are subsets of the full table, not additional records.
 

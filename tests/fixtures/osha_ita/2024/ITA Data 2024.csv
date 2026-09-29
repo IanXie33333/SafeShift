@@ -1,0 +1,2 @@
+establishment_id,establishment_name,street_address,city,state,zip_code,naics_code,annual_average_employees,total_hours_worked,total_dafw_cases,total_djtr_cases,year_filing_for
+00123,Example Warehouse,100 Main St,Los Angeles,ca,90001,493110,25,1000,1,2,2024
