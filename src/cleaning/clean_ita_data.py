@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Standardize OSHA ITA annual summaries and produce a reproducible WP1 audit.
 
-Run: python clean_ita_data.py
+Run from the repository root: python src/cleaning/clean_ita_data.py
 Requires pandas. Raw files are never modified. Case-detail CSVs are inventoried,
 but deliberately not cleaned by this establishment-year pipeline.
 """
@@ -19,7 +19,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 REQUIRED = {
     "establishment_id", "establishment_name", "street_address", "city", "state",
     "zip_code", "naics_code", "annual_average_employees", "total_hours_worked",
@@ -252,14 +252,14 @@ def write_dictionary(output):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input-dir", type=Path, default=ROOT / "raw")
-    parser.add_argument("--output-dir", type=Path, default=ROOT / "processed")
+    parser.add_argument("--input-dir", type=Path, default=REPO_ROOT / "data" / "raw")
+    parser.add_argument("--output-dir", type=Path, default=REPO_ROOT / "data" / "processed")
     parser.add_argument("--overwrite", action="store_true", help="Replace this script's generated output files")
     args = parser.parse_args()
     input_dir, output = args.input_dir.resolve(), args.output_dir.resolve()
     if output == input_dir or input_dir in output.parents or output in input_dir.parents:
         parser.error("Input and output directories must be separate, non-nested directories.")
-    paths = sorted(input_dir.glob("*.csv"))
+    paths = sorted(input_dir.rglob("*.csv"))
     if not paths:
         parser.error(f"No CSV files found in {input_dir}")
     names = ["summary_cleaned.csv", "warehouses_4931.csv", "rows_for_review.csv",
@@ -270,19 +270,20 @@ def main():
     # Preflight all headers before starting a potentially long run.
     inventory, summaries, seen_years = [], [], set()
     for path in paths:
+        source_name = path.relative_to(input_dir).as_posix()
         header, _ = read_csv(path, header_only=True)
         cols = [normalize_header(c) for c in header.columns]
         kind = "summary" if {"total_dafw_cases", "total_djtr_cases"} <= set(cols) else "case_detail" if "case_number" in cols and "incident_outcome" in cols else "unknown"
-        entry = {"source_file": path.name, "kind": kind, "columns": len(cols), "column_names": "|".join(cols)}
+        entry = {"source_file": source_name, "kind": kind, "columns": len(cols), "column_names": "|".join(cols)}
         inventory.append(entry)
         if kind == "unknown":
-            parser.error(f"Unrecognized CSV schema: {path.name}. No guessing about its meaning.")
+            parser.error(f"Unrecognized CSV schema: {source_name}. No guessing about its meaning.")
         if kind == "summary":
             if REQUIRED - set(cols):
-                parser.error(f"{path.name}: missing required fields {sorted(REQUIRED - set(cols))}")
+                parser.error(f"{source_name}: missing required fields {sorted(REQUIRED - set(cols))}")
             year = filename_year(path)
             if year is None:
-                parser.error(f"{path.name}: give each summary a filename with exactly one reporting year, e.g. ITA Data 2024.csv")
+                parser.error(f"{source_name}: give each summary a filename with exactly one reporting year, e.g. ITA Data 2024.csv")
             if year in seen_years:
                 parser.error(f"Multiple summary files for {year}. Select one source release per year.")
             seen_years.add(year)
@@ -304,9 +305,10 @@ def main():
     profiles, flags = [], []
     try:
         for i, (path, entry, year) in enumerate(summaries):
-            print(f"Cleaning {path.name} ...", flush=True)
+            source_name = entry["source_file"]
+            print(f"Cleaning {source_name} ...", flush=True)
             raw, encoding = read_csv(path)
-            clean, profile, counts = clean_summary(raw, path.name, year)
+            clean, profile, counts = clean_summary(raw, source_name, year)
             profiles.extend(profile)
             flags.extend(counts)
             warehouses = clean["is_naics_4931"]
@@ -321,7 +323,7 @@ def main():
                           "candidate_rows": int(clean["candidate_for_linkage"].sum()),
                           "review_rows": int(clean["needs_review"].sum()),
                           "repeated_key_rows": int(clean["quality_flags"].str.contains("repeated_establishment_year").sum())})
-            manifest["sources"].append({"file": path.name, "sha256": file_hash(path), "bytes": path.stat().st_size,
+            manifest["sources"].append({"file": source_name, "sha256": file_hash(path), "bytes": path.stat().st_size,
                                         "rows": len(raw), "encoding": encoding})
             print(f"  {len(clean):,} rows retained; {int(warehouses.sum()):,} warehouse rows", flush=True)
         pd.DataFrame(inventory).to_csv(output / "inventory.csv", index=False)
