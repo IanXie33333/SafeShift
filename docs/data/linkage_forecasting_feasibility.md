@@ -1,5 +1,14 @@
 # Work Package 2: Linkage and Forecasting Feasibility
 
+> **Patch status:** Duplicate-key and identity-field safeguards have been updated.
+> The numerical results below are from the pre-patch run; regeneration on the
+> actual processed dataset is pending. These counts are not a new data freeze.
+
+Patched linkage rules: every row in a duplicate establishment/year group must
+be ineligible. High confidence requires all five identity fields to be present,
+nonblank, and equal across years. Incomplete identity evidence is uncertain.
+Failed validation requires complete identity fields with no agreements.
+
 ## Matching Method
 
 To determine how establishments could be linked across consecutive years, several fields were examined, including `id`, `establishment_id`, establishment name, street address, city, state, and ZIP code. Initial inspection showed that fields such as establishment name and address could change across years even when the records appeared to represent the same establishment.

@@ -3,10 +3,17 @@ import pandas as pd
 pd.set_option("display.max_columns", None)
 
 def build_forecasting_pairs(warehouse_df_sorted):
-    # Keep records eligible for cross-year linkage
-    linkage_df = warehouse_df_sorted[
-        warehouse_df_sorted["candidate_for_linkage"]
-    ].copy()
+    # Every member of an ambiguous establishment/year group must be excluded.
+    eligible = warehouse_df_sorted["candidate_for_linkage"].fillna(False)
+    duplicate_key = warehouse_df_sorted.duplicated(
+        ["establishment_id", "year"], keep=False
+    )
+    if (eligible & duplicate_key).any():
+        raise ValueError(
+            "Duplicate establishment/year groups remain eligible; "
+            "exclude all their rows in candidate_for_linkage before pairing."
+        )
+    linkage_df = warehouse_df_sorted.loc[eligible].copy()
 
     # Sort each establishemnt's records chronologically
     linkage_df = linkage_df.sort_values(["establishment_id", "year"])
@@ -79,66 +86,36 @@ def build_forecasting_pairs(warehouse_df_sorted):
 
 def classify_linkage(paired_df):
     classified_df = paired_df.copy()
-    same_name = (
-        classified_df["name_normalized"]
-        == classified_df["previous_name"]
-    )
+    field_pairs = [
+        ("name_normalized", "previous_name"),
+        ("address_normalized", "previous_address"),
+        ("city", "previous_city"),
+        ("state", "previous_state"),
+        ("zip_code", "previous_zip_code"),
+    ]
+    complete = pd.Series(True, index=classified_df.index)
+    all_agree = pd.Series(True, index=classified_df.index)
+    any_agree = pd.Series(False, index=classified_df.index)
 
-    same_address = (
-        classified_df["address_normalized"]
-        == classified_df["previous_address"]
-    )
+    for current_col, previous_col in field_pairs:
+        current = classified_df[current_col]
+        previous = classified_df[previous_col]
+        usable = (
+            current.notna()
+            & previous.notna()
+            & current.astype("string").str.strip().ne("").fillna(False)
+            & previous.astype("string").str.strip().ne("").fillna(False)
+        )
+        agrees = pd.Series(False, index=classified_df.index)
+        agrees.loc[usable] = current.loc[usable].eq(previous.loc[usable]).fillna(False)
+        complete &= usable
+        all_agree &= agrees
+        any_agree |= agrees
 
-    same_city = (
-        classified_df["city"]
-        == classified_df["previous_city"]
-    )
-
-    same_state = (
-        classified_df["state"]
-        == classified_df["previous_state"]
-    )
-
-    same_zip_code = (
-        classified_df["zip_code"]
-        == classified_df["previous_zip_code"]
-    )
-
-    high_confidence = (
-        same_name
-        & same_address
-        & same_city
-        & same_state
-        & same_zip_code
-    )
-
-    failed_validation = (
-        ~same_name
-        & ~same_address
-        & ~same_city
-        & ~same_state
-        & ~same_zip_code
-    )
-
-    uncertain_confidence = (
-        ~high_confidence
-        & ~failed_validation
-    )
-
-    classified_df["linkage_class"] = "unclassified"
-
-    classified_df.loc[
-        high_confidence, "linkage_class"
-    ] = "high_confidence"
-
-    classified_df.loc[
-        failed_validation, "linkage_class"
-    ] = "failed_validation"
-
-    classified_df.loc[
-        uncertain_confidence, "linkage_class"
-    ] = "uncertain_confidence"
-
+    # Missing identity evidence is uncertain, rather than agreement or a proven mismatch.
+    classified_df["linkage_class"] = "uncertain_confidence"
+    classified_df.loc[complete & all_agree, "linkage_class"] = "high_confidence"
+    classified_df.loc[complete & ~any_agree, "linkage_class"] = "failed_validation"
     return classified_df
 # Function testing happens later, after warehouse_df_sorted is created.
 
