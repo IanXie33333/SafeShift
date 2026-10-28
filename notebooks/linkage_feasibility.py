@@ -2,6 +2,10 @@ import pandas as pd
 
 pd.set_option("display.max_columns", None)
 
+def load_warehouse_data(path="data/processed/warehouses_4931.csv"):
+    """Preserve cleaned identifiers and postal codes when reading the CSV."""
+    return pd.read_csv(path, dtype={"establishment_id": "string", "zip_code": "string"})
+
 def build_forecasting_pairs(warehouse_df_sorted):
     # Every member of an ambiguous establishment/year group must be excluded.
     eligible = warehouse_df_sorted["candidate_for_linkage"].fillna(False)
@@ -123,7 +127,7 @@ def classify_linkage(paired_df):
 # 1. LOAD DATA
 # ============================================================
 
-warehouse_df = pd.read_csv("data/processed/warehouses_4931.csv")
+warehouse_df = load_warehouse_data()
 
 print("\n========== DATASET COLUMNS ==========")
 print(warehouse_df.columns.tolist())

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Standardize OSHA ITA annual summaries and produce a reproducible WP1 audit.
 
 Run from the repository root: python src/cleaning/clean_ita_data.py
@@ -12,8 +11,7 @@ import argparse
 import hashlib
 import json
 import re
-import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -65,8 +63,13 @@ def missing(values: pd.Series) -> pd.Series:
 
 
 def read_csv(path: Path, *, header_only: bool = False) -> tuple[pd.DataFrame, str]:
-    kwargs = dict(dtype=str, keep_default_na=False, skip_blank_lines=False,
-                  on_bad_lines="error", nrows=0 if header_only else None)
+    kwargs = {
+        "dtype": str,
+        "keep_default_na": False,
+        "skip_blank_lines": False,
+        "on_bad_lines": "error",
+        "nrows": 0 if header_only else None,
+    }
     try:
         return pd.read_csv(path, encoding="utf-8-sig", **kwargs), "utf-8-sig"
     except UnicodeDecodeError:
@@ -296,7 +299,7 @@ def main():
     for name in names:
         if (output / name).exists():
             (output / name).unlink()
-    manifest = {"status": "running", "started_utc": datetime.now(timezone.utc).isoformat(),
+    manifest = {"status": "running", "started_utc": datetime.now(UTC).isoformat(),
                 "input_dir": str(input_dir), "pandas_version": pd.__version__,
                 "script_sha256": file_hash(Path(__file__)), "sources": [],
                 "policy": "Retain all summary rows. Provisional candidate flags only. Case details skipped."}
@@ -330,7 +333,7 @@ def main():
         pd.DataFrame(profiles).to_csv(output / "column_profile.csv", index=False)
         pd.DataFrame(flags).to_csv(output / "quality_summary.csv", index=False)
         write_dictionary(output)
-        manifest.update(status="complete", finished_utc=datetime.now(timezone.utc).isoformat(),
+        manifest.update(status="complete", finished_utc=datetime.now(UTC).isoformat(),
                         summary_rows=sum(e["raw_rows"] for e in inventory if e["kind"] == "summary"),
                         skipped_files=[e["source_file"] for e in inventory if e["kind"] != "summary"])
     except Exception as exc:

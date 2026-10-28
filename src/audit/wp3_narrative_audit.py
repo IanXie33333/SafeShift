@@ -186,7 +186,9 @@ def load_year(path: Path, cols: dict, year: int, enc: str) -> pd.DataFrame:
         sep = ((text != "") & (nxt != "")).map({True: " | ", False: ""})
         text = text + sep + nxt
     df["text"] = text
-    df["n_words"] = df["text"].str.split().str.len().fillna(0).astype(int)
+    # Field separators are not narrative words.
+    word_text = text.str.replace(" | ", " ", regex=False)
+    df["n_words"] = word_text.str.split().str.len().fillna(0).astype(int)
 
     if cols["event_code"]:
         raw = df[cols["event_code"]].fillna("").str.strip().str.replace(r"\.0$", "", regex=True)
