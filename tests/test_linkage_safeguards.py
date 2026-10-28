@@ -1,6 +1,7 @@
 """Data-independent regression checks for the WP2 linkage safeguards."""
 
 import ast
+import io
 import unittest
 from pathlib import Path
 
@@ -11,21 +12,22 @@ IDENTITY_FIELDS = ["name_normalized", "address_normalized", "city", "state", "zi
 
 
 def load_functions():
-    # The analysis script reads CSVs at module scope. Load only its two pure functions.
+    # The analysis script reads CSVs at module scope. Load only its pure functions.
     tree = ast.parse(NOTEBOOK.read_text(encoding="utf-8"))
     functions = [
         node for node in tree.body
         if isinstance(node, ast.FunctionDef)
-        and node.name in {"build_forecasting_pairs", "classify_linkage"}
+        and node.name in {"build_forecasting_pairs", "classify_linkage", "load_warehouse_data"}
     ]
     namespace = {"pd": pd}
     module = ast.Module(body=functions, type_ignores=[])
-    # Trusted repository code: execute only the two allowlisted function definitions.
+    # Trusted repository code: execute only the allowlisted function definitions.
     exec(compile(module, str(NOTEBOOK), "exec"), namespace)  # noqa: S102
-    return namespace["build_forecasting_pairs"], namespace["classify_linkage"]
+    return (namespace["build_forecasting_pairs"], namespace["classify_linkage"],
+            namespace["load_warehouse_data"])
 
 
-BUILD, CLASSIFY = load_functions()
+BUILD, CLASSIFY, LOAD = load_functions()
 
 
 def records():
@@ -46,6 +48,19 @@ def records():
 
 
 class TestLinkageSafeguards(unittest.TestCase):
+    def test_csv_reader_preserves_distinct_ids_and_zip_leading_zero(self):
+        csv = io.StringIO(
+            "establishment_id,year,zip_code,candidate_for_linkage\n"
+            "9007199254740992,2023,01234,True\n"
+            "9007199254740993,2024,01234,True\n"
+            ",2023,01234,False\n"
+        )
+        frame = LOAD(csv)
+        self.assertEqual(frame.loc[0, "establishment_id"], "9007199254740992")
+        self.assertEqual(frame.loc[1, "establishment_id"], "9007199254740993")
+        self.assertTrue(pd.isna(frame.loc[2, "establishment_id"]))
+        self.assertTrue(frame["zip_code"].eq("01234").all())
+
     def test_features_targets_and_holdout(self):
         pairs = CLASSIFY(BUILD(records()))
         self.assertTrue(pairs["linkage_class"].eq("high_confidence").all())

@@ -38,6 +38,22 @@ def sample_frame():
 
 
 class AuditRegressionTests(unittest.TestCase):
+    def test_field_separators_do_not_hide_short_narratives(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "Case Detail 2023.csv"
+            fields = ["NEW_NAR_WHAT_HAPPENED", "NEW_NAR_INJURY_ILLNESS",
+                      "NEW_NAR_OBJECT_SUBSTANCE"]
+            pd.DataFrame({fields[0]: ["fell"], fields[1]: ["knee"], fields[2]: ["floor"],
+                          "event_code_pred": ["42"], "event_title_pred": ["Falls"],
+                          "naics_code": ["493110"]}).to_csv(path, index=False)
+            cols = {"text": fields, "event_code": "event_code_pred",
+                    "event_title": "event_title_pred", "naics": "naics_code",
+                    "est_id": None, "case_id": None, "incident_date": None}
+            frame = audit.load_year(path, cols, 2023, "utf-8")
+            self.assertEqual(frame["text"].item(), "fell | knee | floor")
+            self.assertEqual(frame["n_words"].item(), 3)
+            self.assertEqual(audit.quality(frame, cols, 5)["short_narrative_lt_5_words"], 1)
+
     def test_case_counts_require_both_complete_keys(self):
         df = pd.DataFrame({"est": ["A", "A", "B", "B", "C", "C"],
                            "case": ["1", "1", "", "", None, None],
