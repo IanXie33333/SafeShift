@@ -6,6 +6,8 @@ requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.0,<3",
     "pandas>=2.2,<3",
+    "scikit-learn>=1.9.1",
+    "statsmodels>=0.15.0",
 ]
 
 [project.optional-dependencies]
