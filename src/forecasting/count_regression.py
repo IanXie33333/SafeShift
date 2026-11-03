@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 import time
+import matplotlib.pyplot as plt
 
 # Load the forecasting reference data from the processed CSV file
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -56,14 +57,9 @@ print("\nPoisson Regression Results")
 print("MAE:", poisson_mae)
 print("RMSE:", poisson_rmse)
 
-# Debugging: Print the first 10 predictions and actual counts for the Poisson model
-print("First 10 Poisson predictions:", poisson_pred[:10])
-print("First 10 actual counts:", Y_val.iloc[:10].to_numpy())
-
 print("\nPoisson Coefficients:")
 for feature, coefficient in zip(features, poisson_model.coef_):
     print(feature, coefficient)
-
 print("Intercept:", poisson_model.intercept_)
 
 print("\nTraining target distribution")
@@ -88,16 +84,48 @@ nb_runtime = time.perf_counter() - nb_start
 print("\nNegative Binomial regression training complete")
 print("Converged:", nb_results.converged)
 
-print("\nScaled training feature ranges:")
-for i, feature in enumerate(features):
-    print(feature,
-          "min:", X_train_scaled[:, i].min(),
-          "max:", X_train_scaled[:, i].max())
+# Experimental Negative Binomial model with estimated alpha
+nb_estimated_model = sm.NegativeBinomial(
+    Y_train,
+    X_train_nb,
+    loglike_method="nb2"
+)
+
+nb_estimated_start = time.perf_counter()
+
+nb_estimated_results = nb_estimated_model.fit(
+    method="bfgs",
+    maxiter=1000,
+    disp=False
+)
+
+nb_estimated_runtime = time.perf_counter() - nb_estimated_start
+
+print("\nEstimated-alpha Negative Binomial")
+print("Converged:", nb_estimated_results.mle_retvals["converged"])
+print("Estimated alpha:", nb_estimated_results.params["alpha"])
+
+# Evaluate estimated-alpha Negative Binomial model
+X_val_nb = sm.add_constant(np.log1p(X_val), has_constant="add")
+nb_estimated_predictions = nb_estimated_results.predict(X_val_nb)
+
+print("\nEstimated-alpha NB Validation Results")
+print("MAE:", np.mean(np.abs(Y_val - nb_estimated_predictions)))
+print("RMSE:", np.sqrt(np.mean((Y_val - nb_estimated_predictions) ** 2)))
+print(
+    "Poisson Deviance:",
+    mean_poisson_deviance(Y_val, nb_estimated_predictions)
+)
+print("Predicted mean:", np.mean(nb_estimated_predictions))
+
+print("\nNegative Binomial Coefficients:")
+for feature, coefficient in zip(
+    ["const"] + features, 
+    nb_results.params
+):
+    print(feature, coefficient)
 
 # Evalulate negative-binomial regression model on the validation data
-X_val_nb = np.log1p(X_val)
-X_val_nb = sm.add_constant(X_val_nb, has_constant="add")
-
 nb_pred = nb_results.predict(X_val_nb)
 
 nb_mae = np.abs(Y_val - nb_pred).mean()
@@ -106,7 +134,6 @@ nb_rmse = np.sqrt(((Y_val - nb_pred) ** 2).mean())
 print("\nNegative Binomial Regression Results")
 print("MAE:", nb_mae)
 print("RMSE:", nb_rmse)
-
 
 # Compare Poisson deviance across all three models
 epsilon = 1e-10
@@ -132,6 +159,7 @@ predicitons = predictions.rename(columns={"dart_count_t1": "actual_count"})
 predicitons["persistence_pred"] = val_pred
 predicitons["poisson_pred"] = poisson_pred
 predicitons["negative_binomial_pred"] = nb_pred
+predicitons["negative_binomial_estimated_pred"] = nb_estimated_predictions
 
 predicitons.to_csv(
     OUTPUT_DIR / "validation_predictions.csv", 
@@ -168,6 +196,15 @@ metrics = pd.DataFrame([
             Y_val, np.maximum(nb_pred, epsilon)
         ),
         "training_seconds": round(nb_runtime, 4)
+    },
+    {
+        "model": "Negative Binomial (Estimated Alpha)",
+        "mae": np.mean(np.abs(Y_val - nb_estimated_predictions)),
+        "rmse": np.sqrt(np.mean((Y_val - nb_estimated_predictions) ** 2)),
+        "poisson_deviance": mean_poisson_deviance(
+            Y_val, nb_estimated_predictions
+        ),
+        "training_seconds": round(nb_estimated_runtime, 4)
     }
 ])
 
@@ -250,12 +287,109 @@ calibration_summary.to_csv(
 )
 
 print("Calibration results saved successfully")
+print("\nNegative Binomial Coefficients:")
+for feature, coefficient in zip(
+    ["const"] + features,
+    nb_results.params
+):
+    print(feature, coefficient)
 
-# Identify exposure-related columns in the dataset
-print("\nExposure-related columns:")
-print([
-    col for col in df.columns
-    if "exposure" in col.lower() or "flag" in col.lower()
+# Save Negative Binomial coefficients
+nb_coefficients = pd.DataFrame({
+    "feature": ["const"] + features,
+    "coefficient": nb_results.params
+})
+
+nb_coefficients.to_csv(
+    OUTPUT_DIR / "negative_binomial_coefficients.csv",
+    index=False
+)
+print("\nNegative Binomial coefficients saved successfully")
+
+# Plot validation MAE comparison
+plt.figure(figsize=(9, 5))
+
+plt.bar(metrics["model"], metrics["mae"])
+plt.ylabel("Mean Absolute Error (MAE)")
+plt.title("validation MAE Comparison")
+plt.xticks(rotation=20, ha="right")
+
+plt.tight_layout()
+
+plt.savefig(
+    OUTPUT_DIR / "mae_comparison.png",
+    dpi=150
+)
+
+plt.close()
+
+print("\nMAE comparison plot saved successfully")
+
+# Plot Negative Binomial calibration
+plt.figure(figsize=(7, 6))
+
+plt.plot(
+    calibration_summary["predicted_mean"],
+    calibration_summary["actual_mean"],
+    marker="o",
+    label="negative Binomial (Fixed Alpha)"
+)
+
+max_count = max(
+    calibration_summary["predicted_mean"].max(),
+    calibration_summary["actual_mean"].max()
+)
+
+plt.plot(
+    [0, max_count],
+    [0, max_count],
+    linestyle="--",
+    color="gray",
+    label="Perfect Calibration"
+)
+
+plt.xlabel("Mean Predicted DART Count")
+plt.ylabel("Mean Actual DART Count")
+plt.title("Negative Binomial Calibration by Risk Group")
+plt.legend()
+plt.tight_layout()
+
+plt.savefig(
+    OUTPUT_DIR / "negative_binomial_calibration.png",
+    dpi=150
+)
+
+plt.close()
+
+print("\nCalibration plot saved successfully")
+
+# Identify largest prediction errors
+error_examples = predictions.copy()
+
+error_examples["estimated_nb_pred"] = nb_estimated_predictions
+
+error_examples["absolute_error"] = np.abs(
+    error_examples["dart_count_t1"]
+    - error_examples["estimated_nb_pred"]
+)
+
+worst_errors = error_examples.nlargest(
+    5, "absolute_error"
+)
+
+print("\nFive largest Estimated-NB Preduction Errors") 
+print(worst_errors[
+    ["pair_id", "dart_count_t1",
+     "estimated_nb_pred", "absolute_error"]
 ])
-print("\nAll dataset columns:")
-print(df.columns.tolist())
+
+worst_errors.to_csv(
+    OUTPUT_DIR / "largest_prediction_errors.csv",
+    index=False
+)
+
+print("\nLargest prediction errors saved successfully")
+
+
+
+
