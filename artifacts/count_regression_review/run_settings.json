@@ -1,0 +1,117 @@
+{
+  "python": "3.13.9",
+  "numpy": "2.5.3",
+  "pandas": "2.3.3",
+  "sklearn": "1.9.1",
+  "statsmodels": "0.15.0",
+  "features": [
+    "dart_count_t",
+    "employee_count_t",
+    "hours_worked_t"
+  ],
+  "target": "dart_count_t1",
+  "final_test_scored": false,
+  "runs": {
+    "primary": {
+      "train_rows": 21785,
+      "validation_rows": 5019,
+      "models": {
+        "Persistence": {
+          "column": "persistence_pred",
+          "family": "point",
+          "alpha": null,
+          "training_seconds": 0.0
+        },
+        "Poisson": {
+          "column": "poisson_pred",
+          "family": "poisson",
+          "alpha": null,
+          "regularization_alpha": 1.0,
+          "log_features": false,
+          "training_seconds": 0.004309750016545877,
+          "converged": true
+        },
+        "Poisson (log features)": {
+          "column": "poisson_log_pred",
+          "family": "poisson",
+          "alpha": null,
+          "regularization_alpha": 1.0,
+          "log_features": true,
+          "training_seconds": 0.003769833012484014,
+          "converged": true
+        },
+        "Negative Binomial": {
+          "column": "negative_binomial_pred",
+          "family": "negative_binomial",
+          "alpha": 1.0,
+          "training_seconds": 0.02444666699739173,
+          "converged": true
+        },
+        "Negative Binomial (Estimated Alpha)": {
+          "column": "negative_binomial_estimated_pred",
+          "family": "negative_binomial",
+          "alpha": 0.6718908895222752,
+          "training_seconds": 0.09069766700849868,
+          "converged": true
+        }
+      }
+    },
+    "sensitivity_excl_exposure_flags": {
+      "train_rows": 21647,
+      "validation_rows": 4990,
+      "models": {
+        "Persistence": {
+          "column": "persistence_pred",
+          "family": "point",
+          "alpha": null,
+          "training_seconds": 0.0
+        },
+        "Poisson": {
+          "column": "poisson_pred",
+          "family": "poisson",
+          "alpha": null,
+          "regularization_alpha": 1.0,
+          "log_features": false,
+          "training_seconds": 0.00552891701227054,
+          "converged": true
+        },
+        "Poisson (log features)": {
+          "column": "poisson_log_pred",
+          "family": "poisson",
+          "alpha": null,
+          "regularization_alpha": 0.1,
+          "log_features": true,
+          "training_seconds": 0.005557333992328495,
+          "converged": true
+        },
+        "Negative Binomial": {
+          "column": "negative_binomial_pred",
+          "family": "negative_binomial",
+          "alpha": 1.0,
+          "training_seconds": 0.015941959019983187,
+          "converged": true
+        },
+        "Negative Binomial (Estimated Alpha)": {
+          "column": "negative_binomial_estimated_pred",
+          "family": "negative_binomial",
+          "alpha": 0.654401953070229,
+          "training_seconds": 0.09024854199378751,
+          "converged": true
+        }
+      }
+    }
+  },
+  "poisson_log_alpha_grid": [
+    0.0,
+    0.01,
+    0.1,
+    1.0
+  ],
+  "tuning_holdout": "feature_year 2022 within training; select by MAE",
+  "poisson_deviance_floor": 1e-10,
+  "deviance_note": "Persistence deviance uses predictions clipped to this floor; it depends on the floor and does not validate a count distribution.",
+  "source_sha256": {
+    "forecasting_reference.csv": "44f51a9849a43be9e627ca9dd7a38b5dce3871ceaadfa2070c55513845321981",
+    "forecasting_row_manifest.csv": "5395796e53011cb70623568a1cc9135a64e3576de6b710cf427e50b4b29b95da"
+  }
+}

@@ -323,7 +323,8 @@ def raw_duplicate_counts(path: Path, enc: str) -> dict:
     Hashes locate candidates only; actual full-row equality verifies duplicates.
     These are duplicate records, not proof that two injuries are the same event.
     """
-    kwargs = {"dtype": str, "encoding": enc, "chunksize": CHUNK}
+    # Match the profiling and narrative readers when source bytes cannot decode.
+    kwargs = {"dtype": str, "encoding": enc, "encoding_errors": "replace", "chunksize": CHUNK}
     hashes = [pd.util.hash_pandas_object(c, index=False) for c in pd.read_csv(path, **kwargs)]
     counts = pd.concat(hashes, ignore_index=True).value_counts()
     repeated_hashes = counts.index[counts.gt(1)]

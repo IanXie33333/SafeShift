@@ -1,395 +1,196 @@
-from pathlib import Path
-from sklearn.linear_model import PoissonRegressor
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_poisson_deviance
-import pandas as pd
-import numpy as np
-import statsmodels.api as sm
+"""Reviewed Package A runs. Original artifacts/count_regression stays unchanged.
+
+Run: uv run --locked python -m src.forecasting.count_regression
+"""
+
+import argparse
+import json
+import platform
 import time
-import matplotlib.pyplot as plt
+from pathlib import Path
 
-# Load the forecasting reference data from the processed CSV file
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DATA_PATH = PROJECT_ROOT / "data" / "processed" / "forecasting_reference.csv"
-df = pd.read_csv(DATA_PATH)
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import PoissonRegressor
+from sklearn.metrics import mean_absolute_error, mean_poisson_deviance
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import FunctionTransformer, StandardScaler
 
-# Split the data into training and validation sets based on the "dataset_split" column
-train = df[df["dataset_split"] == "train"].copy()
-features = ["dart_count_t", "employee_count_t", "hours_worked_t"]
-X_train = train[features]
-Y_train = train["dart_count_t1"]
+if __package__:
+    from .review_utils import (
+        EPS,
+        FEATURES,
+        RUNS,
+        TARGET,
+        cohort,
+        fingerprints,
+        implied_zero_probability,
+        load_development,
+        protect_submitted_outputs,
+        run_file,
+    )
+else:
+    from review_utils import (
+        EPS,
+        FEATURES,
+        RUNS,
+        TARGET,
+        cohort,
+        fingerprints,
+        implied_zero_probability,
+        load_development,
+        protect_submitted_outputs,
+        run_file,
+    )
 
-# Prepare the validation data for evaluation
-val = df[df["dataset_split"] == "validation"].copy()
-val_pred = val["dart_count_t"]
+ROOT = Path(__file__).resolve().parents[2]
+LOG_ALPHAS = [0.0, 0.01, 0.1, 1.0]
 
-# Evaluate the persistence baseline (using the previous count as the prediction)
-errors = val["dart_count_t1"] - val_pred
-mae = errors.abs().mean()
-rmse = np.sqrt((errors ** 2).mean())
 
-print("Persistence Baseline Results")
-print("MAE:", mae)
-print("RMSE:", rmse)
+def poisson_pipeline(alpha=1.0, log_features=False):
+    steps = [FunctionTransformer(np.log1p)] if log_features else []
+    return make_pipeline(*steps, StandardScaler(), PoissonRegressor(alpha=alpha, max_iter=1000))
 
-# Fit a Poisson regression model on the training data
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-poisson_model = PoissonRegressor(max_iter=1000)
-poisson_start = time.perf_counter()
-poisson_model.fit(X_train_scaled, Y_train)
-poisson_runtime = time.perf_counter() - poisson_start
-print("Poisson regression training complete")
 
-# Evaluate the Poisson regression model on the validation data
-X_val = val[features]
-Y_val = val["dart_count_t1"]
+def tune_log_poisson(train):
+    fit = train.loc[train.feature_year.lt(2022)]
+    holdout = train.loc[train.feature_year.eq(2022)]
+    if fit.empty or holdout.empty:
+        raise ValueError("The inner temporal holdout requires training years before and in 2022")
+    rows = []
+    for alpha in LOG_ALPHAS:
+        model = poisson_pipeline(alpha, log_features=True).fit(fit[FEATURES], fit[TARGET])
+        prediction = model.predict(holdout[FEATURES])
+        rows.append({"alpha": alpha,
+                     "inner_mae": mean_absolute_error(holdout[TARGET], prediction),
+                     "inner_deviance": mean_poisson_deviance(holdout[TARGET], prediction)})
+    table = pd.DataFrame(rows).sort_values(["inner_mae", "inner_deviance", "alpha"])
+    return float(table.iloc[0].alpha), table
 
-# Scale the validation features using the fitted scaler
-X_val_scaled = scaler.transform(X_val)
-poisson_pred = poisson_model.predict(X_val_scaled)
 
-# Calculate the evaluation metrics for the Poisson regression model
-poisson_mae = np.abs(Y_val - poisson_pred).mean()
-poisson_rmse = np.sqrt(((Y_val - poisson_pred) ** 2).mean())
+def fit_models(train, validation):
+    import statsmodels.api as sm
 
-print("\nPoisson Regression Results")
-print("MAE:", poisson_mae)
-print("RMSE:", poisson_rmse)
+    predictions = {"persistence_pred": validation.dart_count_t.to_numpy()}
+    details = {"Persistence": {"column": "persistence_pred", "family": "point",
+                                "alpha": None, "training_seconds": 0.0}}
+    coefficients = []
+    best_alpha, tuning = tune_log_poisson(train)
+    for name, column, alpha, log_features in [
+        ("Poisson", "poisson_pred", 1.0, False),
+        ("Poisson (log features)", "poisson_log_pred", best_alpha, True),
+    ]:
+        start = time.perf_counter()
+        model = poisson_pipeline(alpha, log_features).fit(train[FEATURES], train[TARGET])
+        seconds = time.perf_counter() - start
+        predictions[column] = model.predict(validation[FEATURES])
+        estimator = model[-1]
+        if estimator.n_iter_ >= estimator.max_iter:
+            raise RuntimeError(f"{name} reached its iteration limit; inspect convergence")
+        details[name] = {"column": column, "family": "poisson", "alpha": None,
+                         "regularization_alpha": alpha, "log_features": log_features,
+                         "training_seconds": seconds, "converged": True}
+        for feature, value in zip(["intercept"] + FEATURES,
+                                  [estimator.intercept_, *estimator.coef_], strict=True):
+            coefficients.append({"model": name, "feature": feature, "coefficient": value,
+                                 "scale": "standardized log1p" if log_features else "standardized"})
+    x_train = sm.add_constant(np.log1p(train[FEATURES]), has_constant="add")
+    x_validation = sm.add_constant(np.log1p(validation[FEATURES]), has_constant="add")
+    for estimated in [False, True]:
+        name = "Negative Binomial (Estimated Alpha)" if estimated else "Negative Binomial"
+        column = "negative_binomial_estimated_pred" if estimated else "negative_binomial_pred"
+        start = time.perf_counter()
+        if estimated:
+            fit = sm.NegativeBinomial(train[TARGET], x_train, loglike_method="nb2").fit(
+                method="bfgs", maxiter=1000, disp=False)
+            converged = bool(fit.mle_retvals["converged"])
+            alpha = float(fit.params["alpha"])
+        else:
+            fit = sm.GLM(train[TARGET], x_train,
+                         family=sm.families.NegativeBinomial(alpha=1.0)).fit(maxiter=1000)
+            converged, alpha = bool(fit.converged), 1.0
+        seconds = time.perf_counter() - start
+        if not converged:
+            raise RuntimeError(f"{name} did not converge")
+        predictions[column] = np.asarray(fit.predict(x_validation))
+        details[name] = {"column": column, "family": "negative_binomial", "alpha": alpha,
+                         "training_seconds": seconds, "converged": converged}
+        for feature, value in fit.params.items():
+            coefficients.append({"model": name, "feature": feature, "coefficient": value,
+                                 "scale": "NB2 dispersion" if feature == "alpha" else "log1p"})
+    return predictions, details, pd.DataFrame(coefficients), tuning
 
-print("\nPoisson Coefficients:")
-for feature, coefficient in zip(features, poisson_model.coef_):
-    print(feature, coefficient)
-print("Intercept:", poisson_model.intercept_)
 
-print("\nTraining target distribution")
-print(Y_train.describe())
-print("Training zero rate:", (Y_train == 0).mean())
-print("Training variance:", Y_train.var())
+def evaluate_run(train, validation, run, output):
+    predictions, settings, coefficients, tuning = fit_models(train, validation)
+    saved = validation[["pair_id", TARGET]].rename(columns={TARGET: "actual_count"}).copy()
+    saved["run"] = run
+    y = validation[TARGET].to_numpy()
+    rows, calibration, errors = [], [], []
+    for name, config in settings.items():
+        p = np.asarray(predictions[config["column"]], dtype=float)
+        if not np.isfinite(p).all() or (p < 0).any():
+            raise RuntimeError(f"{name} produced invalid predictions")
+        saved[config["column"]] = p
+        zero = implied_zero_probability(p, config["family"], config["alpha"])
+        rows.append({"model": name, "run": run, "train_rows": len(train),
+                     "validation_rows": len(validation),
+                     "mae": mean_absolute_error(y, p), "rmse": np.mean((y - p) ** 2) ** 0.5,
+                     "poisson_deviance": mean_poisson_deviance(y, np.maximum(p, EPS)),
+                     "mean_pred": p.mean(), "mean_actual": y.mean(),
+                     "implied_zero_share": float(zero.mean()),
+                     "observed_zero_share": float((y == 0).mean()),
+                     "alpha": config["alpha"], "training_seconds": config["training_seconds"]})
+        groups = pd.qcut(pd.Series(p).rank(method="first"), 5, labels=False)
+        part = pd.DataFrame({"risk_group": groups, "actual": y, "predicted": p})
+        calibration.append(part.groupby("risk_group").agg(
+            actual_mean=("actual", "mean"), predicted_mean=("predicted", "mean"),
+            count=("actual", "size")).reset_index().assign(model=name))
+        part = validation[["pair_id", *FEATURES]].copy()
+        part["actual_count"], part["prediction"] = y, p
+        part["absolute_error"] = np.abs(y - p)
+        errors.append(part.nlargest(5, "absolute_error").assign(model=name))
+    saved.to_csv(output / run_file("validation_predictions", run), index=False)
+    table = pd.DataFrame(rows)
+    table.to_csv(output / run_file("model_metrics", run), index=False)
+    coefficients.to_csv(output / run_file("coefficients", run), index=False)
+    tuning.to_csv(output / run_file("poisson_log_tuning", run), index=False)
+    pd.concat(calibration).to_csv(output / run_file("calibration", run), index=False)
+    pd.concat(errors).to_csv(output / run_file("largest_prediction_errors", run), index=False)
+    print(f"\n{run}: train={len(train)}, validation={len(validation)}")
+    print(table[["model", "mae", "rmse", "poisson_deviance"]].to_string(index=False))
+    return {"train_rows": len(train), "validation_rows": len(validation), "models": settings}
 
-# Negative-binomial regression with log-transfomred features
-X_train_nb = np.log1p(X_train)
-X_train_nb = sm.add_constant(X_train_nb)
 
-nb_model = sm.GLM(
-    Y_train,
-    X_train_nb,
-    family=sm.families.NegativeBinomial(alpha=1.0)
-)
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data-dir", type=Path, default=ROOT / "data/processed/modeling_v1")
+    parser.add_argument("--out", type=Path, default=ROOT / "artifacts/count_regression_review")
+    args = parser.parse_args()
+    output = protect_submitted_outputs(args.out, ROOT)
+    train, validation = load_development(args.data_dir)
+    output.mkdir(parents=True, exist_ok=True)
+    runs = {}
+    for run in RUNS:
+        tr, va = cohort(train, validation, run)
+        runs[run] = evaluate_run(tr, va, run, output)
+    import sklearn
+    import statsmodels
 
-nb_start = time.perf_counter()
-nb_results = nb_model.fit(maxiter=1000)
-nb_runtime = time.perf_counter() - nb_start
-
-print("\nNegative Binomial regression training complete")
-print("Converged:", nb_results.converged)
-
-# Experimental Negative Binomial model with estimated alpha
-nb_estimated_model = sm.NegativeBinomial(
-    Y_train,
-    X_train_nb,
-    loglike_method="nb2"
-)
-
-nb_estimated_start = time.perf_counter()
-
-nb_estimated_results = nb_estimated_model.fit(
-    method="bfgs",
-    maxiter=1000,
-    disp=False
-)
-
-nb_estimated_runtime = time.perf_counter() - nb_estimated_start
-
-print("\nEstimated-alpha Negative Binomial")
-print("Converged:", nb_estimated_results.mle_retvals["converged"])
-print("Estimated alpha:", nb_estimated_results.params["alpha"])
-
-# Evaluate estimated-alpha Negative Binomial model
-X_val_nb = sm.add_constant(np.log1p(X_val), has_constant="add")
-nb_estimated_predictions = nb_estimated_results.predict(X_val_nb)
-
-print("\nEstimated-alpha NB Validation Results")
-print("MAE:", np.mean(np.abs(Y_val - nb_estimated_predictions)))
-print("RMSE:", np.sqrt(np.mean((Y_val - nb_estimated_predictions) ** 2)))
-print(
-    "Poisson Deviance:",
-    mean_poisson_deviance(Y_val, nb_estimated_predictions)
-)
-print("Predicted mean:", np.mean(nb_estimated_predictions))
-
-print("\nNegative Binomial Coefficients:")
-for feature, coefficient in zip(
-    ["const"] + features, 
-    nb_results.params
-):
-    print(feature, coefficient)
-
-# Evalulate negative-binomial regression model on the validation data
-nb_pred = nb_results.predict(X_val_nb)
-
-nb_mae = np.abs(Y_val - nb_pred).mean()
-nb_rmse = np.sqrt(((Y_val - nb_pred) ** 2).mean())
-
-print("\nNegative Binomial Regression Results")
-print("MAE:", nb_mae)
-print("RMSE:", nb_rmse)
-
-# Compare Poisson deviance across all three models
-epsilon = 1e-10
-
-print("\nPoisson Deviance Comparison")
-print("Persistence:", mean_poisson_deviance(Y_val, np.maximum(val_pred, epsilon)))
-print("Poisson:", mean_poisson_deviance(Y_val, np.maximum(poisson_pred, epsilon)))
-print("Negative Binomial:", mean_poisson_deviance(Y_val, np.maximum(nb_pred, epsilon)))
-
-# training runtime comparison for all three models 
-print("\nTraining Runtime Comparison")
-print("Persistence: 0 seconds (no training required)")
-print("Poisson:", round(poisson_runtime, 4), "seconds")
-print("Negative Binomial:", round(nb_runtime, 4), "seconds")
-
-# Save validation predicitons for all three models
-OUTPUT_DIR = PROJECT_ROOT / "artifacts" / "count_regression"
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-predictions = val[["pair_id", "dart_count_t1"]].copy()
-predicitons = predictions.rename(columns={"dart_count_t1": "actual_count"})
-
-predicitons["persistence_pred"] = val_pred
-predicitons["poisson_pred"] = poisson_pred
-predicitons["negative_binomial_pred"] = nb_pred
-predicitons["negative_binomial_estimated_pred"] = nb_estimated_predictions
-
-predicitons.to_csv(
-    OUTPUT_DIR / "validation_predictions.csv", 
-    index=False
-)
-
-print("\nValidation predictions saved successfully")
-
-# Save model evaluation metrics
-metrics = pd.DataFrame([
-    {
-        "model": "Persistence",
-        "mae": mae,
-        "rmse": rmse,
-        "poisson_deviance": mean_poisson_deviance(
-            Y_val, np.maximum(val_pred, epsilon)
-        ),
-        "training_seconds": 0.0
-    },
-    {
-        "model": "Poisson",
-        "mae": poisson_mae,
-        "rmse": poisson_rmse,
-        "poisson_deviance": mean_poisson_deviance(
-            Y_val, np.maximum(poisson_pred, epsilon)
-        ),
-        "training_seconds": round(poisson_runtime, 4)
-    },
-    {
-        "model": "Negative Binomial",
-        "mae": nb_mae,
-        "rmse": nb_rmse,
-        "poisson_deviance": mean_poisson_deviance(
-            Y_val, np.maximum(nb_pred, epsilon)
-        ),
-        "training_seconds": round(nb_runtime, 4)
-    },
-    {
-        "model": "Negative Binomial (Estimated Alpha)",
-        "mae": np.mean(np.abs(Y_val - nb_estimated_predictions)),
-        "rmse": np.sqrt(np.mean((Y_val - nb_estimated_predictions) ** 2)),
-        "poisson_deviance": mean_poisson_deviance(
-            Y_val, nb_estimated_predictions
-        ),
-        "training_seconds": round(nb_estimated_runtime, 4)
+    metadata = {
+        "python": platform.python_version(), "numpy": np.__version__,
+        "pandas": pd.__version__, "sklearn": sklearn.__version__,
+        "statsmodels": statsmodels.__version__, "features": FEATURES, "target": TARGET,
+        "final_test_scored": False, "runs": runs, "poisson_log_alpha_grid": LOG_ALPHAS,
+        "tuning_holdout": "feature_year 2022 within training; select by MAE",
+        "poisson_deviance_floor": EPS,
+        "deviance_note": "Persistence deviance uses predictions clipped to this floor; "
+                         "it depends on the floor and does not validate a count distribution.",
+        "source_sha256": fingerprints([args.data_dir / "forecasting_reference.csv",
+                                       args.data_dir / "forecasting_row_manifest.csv"]),
     }
-])
-
-metrics.to_csv(
-    OUTPUT_DIR / "model_metrics.csv",
-    index=False
-)
-
-print("\nValidation metrics saved successfully")
-
-# Compare observed and predicted zero rates
-print("\nZero Rate Comparison")
-print("Actual:", (Y_val == 0).mean())
-print("Persistence:", (val_pred == 0).mean())
-print("Poisson:", (poisson_pred < 0.5).mean())
-print("Negative Binomial:", (nb_pred < 0.5).mean())
-
-# Calculate residual variance for each model
-print("\nResidual Dispersion Comparison")
-print("Persistence:",
-      np.var(Y_val.to_numpy() - val_pred.to_numpy()))
-
-print("Poisson:",
-      np.var(Y_val.to_numpy() - poisson_pred))
-
-print("Negative Binomial:",
-      np.var(Y_val.to_numpy() - nb_pred))
-
-# Pearson dispersion diagnostics
-n = len(Y_val)
-p = len(features) + 1
-
-poisson_pearson = np.sum(
-    (Y_val.to_numpy() - poisson_pred) ** 2 
-    / np.maximum(poisson_pred, epsilon)
-) / (n - p)
-
-nb_variance = nb_pred + 1.0 * nb_pred ** 2
-
-nb_pearson = np.sum(
-    (Y_val.to_numpy() - nb_pred) ** 2
-    / np.maximum(nb_variance, epsilon)
-) / (n - p)
-
-print("\nPearson Dispersion Comparison")
-print("Poisson:", poisson_pearson)
-print("Negative Binomial:", nb_pearson)
-
-# Compare average predicted and actual injury counts
-print("\nMean Calibration Comparison")
-print("Actual mean:", Y_val.mean())
-print("Persistence mean:", val_pred.mean())
-print("Poisson mean:", poisson_pred.mean())
-print("Negative Binomial mean:", nb_pred.mean())
-
-# Calibration analysis for the Negative Binomial model
-calibration = pd.DataFrame({
-    "actual": Y_val.to_numpy(),
-    "predicted": nb_pred
-})
-
-calibration["risk_group"] = pd.qcut (
-    calibration["predicted"],
-    q=5,
-    labels=False,
-    duplicates="drop"
-)
-
-calibration_summary = calibration.groupby("risk_group").agg(
-    actual_mean=("actual", "mean"),
-    predicted_mean=("predicted", "mean"),
-    count=("actual", "size")
-)
-
-print("\nNegative Binomial Calibration by Risk Group")
-print(calibration_summary)
-
-calibration_summary.to_csv(
-    OUTPUT_DIR / "negative_binomial_calibration.csv"
-)
-
-print("Calibration results saved successfully")
-print("\nNegative Binomial Coefficients:")
-for feature, coefficient in zip(
-    ["const"] + features,
-    nb_results.params
-):
-    print(feature, coefficient)
-
-# Save Negative Binomial coefficients
-nb_coefficients = pd.DataFrame({
-    "feature": ["const"] + features,
-    "coefficient": nb_results.params
-})
-
-nb_coefficients.to_csv(
-    OUTPUT_DIR / "negative_binomial_coefficients.csv",
-    index=False
-)
-print("\nNegative Binomial coefficients saved successfully")
-
-# Plot validation MAE comparison
-plt.figure(figsize=(9, 5))
-
-plt.bar(metrics["model"], metrics["mae"])
-plt.ylabel("Mean Absolute Error (MAE)")
-plt.title("validation MAE Comparison")
-plt.xticks(rotation=20, ha="right")
-
-plt.tight_layout()
-
-plt.savefig(
-    OUTPUT_DIR / "mae_comparison.png",
-    dpi=150
-)
-
-plt.close()
-
-print("\nMAE comparison plot saved successfully")
-
-# Plot Negative Binomial calibration
-plt.figure(figsize=(7, 6))
-
-plt.plot(
-    calibration_summary["predicted_mean"],
-    calibration_summary["actual_mean"],
-    marker="o",
-    label="negative Binomial (Fixed Alpha)"
-)
-
-max_count = max(
-    calibration_summary["predicted_mean"].max(),
-    calibration_summary["actual_mean"].max()
-)
-
-plt.plot(
-    [0, max_count],
-    [0, max_count],
-    linestyle="--",
-    color="gray",
-    label="Perfect Calibration"
-)
-
-plt.xlabel("Mean Predicted DART Count")
-plt.ylabel("Mean Actual DART Count")
-plt.title("Negative Binomial Calibration by Risk Group")
-plt.legend()
-plt.tight_layout()
-
-plt.savefig(
-    OUTPUT_DIR / "negative_binomial_calibration.png",
-    dpi=150
-)
-
-plt.close()
-
-print("\nCalibration plot saved successfully")
-
-# Identify largest prediction errors
-error_examples = predictions.copy()
-
-error_examples["estimated_nb_pred"] = nb_estimated_predictions
-
-error_examples["absolute_error"] = np.abs(
-    error_examples["dart_count_t1"]
-    - error_examples["estimated_nb_pred"]
-)
-
-worst_errors = error_examples.nlargest(
-    5, "absolute_error"
-)
-
-print("\nFive largest Estimated-NB Preduction Errors") 
-print(worst_errors[
-    ["pair_id", "dart_count_t1",
-     "estimated_nb_pred", "absolute_error"]
-])
-
-worst_errors.to_csv(
-    OUTPUT_DIR / "largest_prediction_errors.csv",
-    index=False
-)
-
-print("\nLargest prediction errors saved successfully")
+    (output / "run_settings.json").write_text(json.dumps(metadata, indent=2) + "\n")
 
 
-
-
+if __name__ == "__main__":
+    main()

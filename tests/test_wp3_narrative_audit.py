@@ -80,6 +80,19 @@ class AuditRegressionTests(unittest.TestCase):
             self.assertEqual(counts["exact_duplicate_raw_rows"], 2)
             self.assertEqual(counts["exact_duplicate_raw_extra_copies"], 1)
 
+    def test_full_row_duplicates_tolerate_undefined_cp1252_bytes(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "raw.csv"
+            path.write_bytes(
+                b"text,unloaded_column\nother,C\nsame,broken\x9d\nsame,broken\x9d\n"
+            )
+            enc = audit.detect_encoding(path)
+            self.assertEqual(enc, "cp1252")
+            with patch.object(audit, "CHUNK", 2):
+                counts = audit.raw_duplicate_counts(path, enc)
+            self.assertEqual(counts["exact_duplicate_raw_rows"], 2)
+            self.assertEqual(counts["exact_duplicate_raw_extra_copies"], 1)
+
     def test_major_denominator_and_zero_classes(self):
         base = sample_frame().iloc[[0, 1, 8, 42]].copy()
         counts, _ = audit.major_tables(base)

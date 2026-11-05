@@ -2,14 +2,14 @@
 
 Author: Steven. Status: validation results only. Final test (2024) has **not** been scored.
 
-**Question.** How can we reliably build a predictor from injury narrative text to predict the
-category of future injuries? This note compares simple, fast baselines on SafeShift modeling
+**Question.** How well can we classify an existing injury report into one of five
+categories using its narrative text, and how does that agreement transfer to later reporting years? This note compares simple, fast baselines on SafeShift modeling
 dataset v1 and says what the validation numbers do and do not support.
 
 ## Reproduce
 
 ```bash
-uv run --with scikit-learn --with matplotlib python src/nlp/narrative_models.py \
+uv run --locked python src/nlp/narrative_models.py \
     --data-dir data/processed/modeling_v1 --seed 42
 ```
 
@@ -22,10 +22,17 @@ uv run --with scikit-learn --with matplotlib python src/nlp/narrative_models.py 
   against 0.9076, 602 errors against 591). The solver ends at slightly different points on
   different numeric libraries even though it converges, so expect small differences, and the
   logistic regression / linear SVM order can flip. scikit-learn and matplotlib are not in
-  `pyproject.toml`; `--with` avoids editing `uv.lock`. If the group adopts this package they
-  should be added as dependencies.
-- Tests: `uv run --with scikit-learn pytest tests/test_narrative_models.py` (skipped
+  the original base branch. After merging Package A, use its project dependencies and
+  `uv sync --extra dev --locked`; the reviewed command uses that lock without `--with`.
+  The committed artifacts retain their original environment metadata. New runs use the
+  project-supported pandas below version 3 and may produce slightly different scores.
+- Tests: `uv run --locked pytest tests/test_narrative_models.py` (skipped
   automatically if scikit-learn is missing).
+
+New runs write to `artifacts/nlp_package_c_review/metrics` and `figures`. The submitted
+files under `artifacts/metrics` and `artifacts/figures` remain historical results.
+The new paired-comparison CSV reports an LR-minus-SVM macro-F1 interval; an interval
+containing zero does not establish formal equivalence. No final-test scoring is added.
 
 ## Setup
 
@@ -90,7 +97,7 @@ Validation predictions for every model (record ID, true label, predicted label, 
   errors. A reviewer should judge these, which is the open manual-review item from WP3.
 - Accuracy is lower on long narratives (0.958 under 30 words, 0.920 at 80 or more), but
   macro-F1 has no clear trend by length (`nlp_package_c_by_text_length.csv`).
-- Confidence is usable: predictions at 0.97 or higher confidence (7,661 rows) are 99.5% correct,
+- Confidence separates agreement with the provided machine labels on this validation set: predictions at 0.97 or higher confidence (7,661 rows) are 99.5% correct,
   and below 0.5 (148 rows) are 49% correct (`nlp_package_c_logreg_confidence_bins.csv`).
 
 ## Recommendation for the Nov 4 discussion
@@ -98,8 +105,7 @@ Validation predictions for every model (record ID, true label, predicted label, 
 1. **Primary: word 1-2gram TF-IDF with logistic regression** (C=10, balanced class weights).
    It ties the linear SVM on every headline metric, and its probabilities support a
    "send low-confidence cases to a person" rule.
-2. **Challenger: word 1-2gram TF-IDF with a linear SVM.** Statistically indistinguishable on
-   validation, faster to fit, no probabilities.
+2. **Challenger: word 1-2gram TF-IDF with a linear SVM.** Near-identical validation performance, faster to fit, no direct probabilities.
 3. Do not spend more time on character n-grams or Complement NB here: character n-grams were
    lower and about five times slower to fit than the word SVM; Complement NB was clearly worse, mostly on transportation
    recall (0.46).
@@ -112,9 +118,9 @@ Validation predictions for every model (record ID, true label, predicted label, 
   test is 2024. Same-year validation is expected to be optimistic for a classifier that will
   label future years, because wording, establishments and, per WP3, upstream coding rules can
   shift between years. How much lower 2024 will be is unknown until it is scored once.
-- **Labels are machine-assigned.** Scores measure agreement with the BLS autocoder's output, not
-  with expert coders. A high score means we can reproduce that labeler, not that the
-  categories are correct.
+- **Labels are machine-assigned.** Scores measure agreement with the provided machine-assigned labels, not
+  with expert coders. A high score supports reproduction of the provided labels;
+  expert correctness still requires independent manual review.
 - **Still improving with data.** Macro-F1 on a linear SVM rises from 0.775 (5% of training) to
   0.890 (50%) to 0.907 (100%) and has not flattened (`nlp_package_c_learning_curve.csv`).
 - **Rare classes are small.** Harmful exposure has 185 validation cases and transportation 410,
@@ -122,7 +128,7 @@ Validation predictions for every model (record ID, true label, predicted label, 
 - **2025 is closed-set.** Out-of-scope injuries in 2025 will still be forced into one of five
   classes.
 
-## Research answer: reliable text prediction of future injury categories
+## Research answer: classifying reports from later years
 
 What this package measured, and what the references suggest should come next:
 
@@ -150,3 +156,5 @@ What this package measured, and what the references suggest should come next:
 - BLS, Automated coding of injury and illness narratives: <https://www.bls.gov/iif/automated-coding.htm>
 - BLS, Deep neural networks for worker injury autocoding: <https://www.bls.gov/iif/automated-coding/deep-neural-networks.pdf>
 - Building for Tomorrow: Assessing the Temporal Persistence of Text Classifiers: <https://arxiv.org/abs/2205.05435>
+
+The model requires a narrative written after an incident. Forecasting injury categories before an incident remains a separate feasibility task.

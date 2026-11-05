@@ -1,0 +1,18 @@
+{
+  "seed": 42,
+  "data_dir": "/Users/ianian/SafeShift/data/processed/modeling_v1",
+  "n_train": 45670,
+  "n_validation": 11478,
+  "final_test_used": false,
+  "selected_family": "logreg",
+  "selected_config": "word_1-2gram_min3|C=10.0|cw=balanced",
+  "python": "3.13.9",
+  "sklearn": "1.9.1",
+  "pandas": "2.3.3",
+  "numpy": "2.5.3",
+  "source_sha256": "42a1a7522512f515c9eebaf883d7dc00254420b26f84306c4ab84299b9f06edd",
+  "labels": "provided machine-assigned categories; not expert ground truth",
+  "confidence_note": "Scores support review prioritization; probabilities are not validated expert correctness",
+  "bootstrap_note": "Row resampling excludes tuning and temporal-shift uncertainty",
+  "total_seconds": 82.0
+}

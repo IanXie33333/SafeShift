@@ -13,7 +13,7 @@
 Run from the repository root (dependencies are pinned in lightgbm_forecast.py.lock):
   uv run --locked --script src/forecasting/lightgbm_forecast.py
 
-Uses only train/validation rows of SafeShift modeling v1; the final-test split is never loaded.
+Uses only train/validation rows of SafeShift modeling v1; final-test rows are filtered before fitting or scoring.
 """
 
 import argparse
@@ -22,14 +22,36 @@ import json
 import time
 from pathlib import Path
 
-import lightgbm as lgb
 import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn.metrics import mean_absolute_error, mean_poisson_deviance, root_mean_squared_error
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_poisson_deviance,
+    root_mean_squared_error,
+)
+
+if __package__:
+    from .review_utils import (
+        cohort,
+        fingerprints,
+        implied_zero_probability,
+        load_development,
+        protect_submitted_outputs,
+        read_package_a_run,
+    )
+else:
+    from review_utils import (
+        cohort,
+        fingerprints,
+        implied_zero_probability,
+        load_development,
+        protect_submitted_outputs,
+        read_package_a_run,
+    )
 
 ROOT = Path(__file__).resolve().parents[2]
 FEATURES = ["dart_count_t", "employee_count_t", "hours_worked_t"]
@@ -41,54 +63,52 @@ LGB_NAME = "LightGBM Poisson"
 A_MODELS = {
     "persistence_pred": ("Persistence", "Persistence"),
     "poisson_pred": ("Poisson", "Poisson"),
+    "poisson_log_pred": ("Poisson (log features)", "Poisson (log features)"),
     "negative_binomial_pred": ("Negative Binomial (fixed alpha)", "Negative Binomial"),
     "negative_binomial_estimated_pred": (
         "Negative Binomial (estimated alpha)", "Negative Binomial (Estimated Alpha)"),
 }
 MODELS = [LGB_NAME] + [name for name, _ in A_MODELS.values()]
-COLORS = dict(zip(MODELS, ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4"]))
+COLORS = dict(zip(MODELS, ["#2a78d6", "#eb6834", "#1baf7a", "#8c63b5", "#eda100", "#e87ba4"]))
 GRID = {
     "num_leaves": [7, 15, 31],
     "learning_rate": [0.03, 0.1],
     "min_child_samples": [20, 100],
     "reg_lambda": [0.0, 1.0],
 }
-BASE_PARAMS = {"objective": "poisson", "random_state": SEED, "deterministic": True,
+BASE_PARAMS = {"objective": "poisson", "metric": "l1", "random_state": SEED, "deterministic": True,
                    "force_row_wise": True, "n_jobs": 1, "verbose": -1}
 SIZE_BINS = ([0, 50, 250, 1000, np.inf], ["<50", "50-249", "250-999", "1000+"])
 COUNT_BINS = ([-0.5, 0.5, 2.5, 9.5, 49.5, np.inf], ["0", "1-2", "3-9", "10-49", "50+"])
 
 
 def load(data_dir):
-    df = pd.read_csv(data_dir / "forecasting_reference.csv",
-                     dtype={"pair_id": "string", "establishment_id": "string"})
-    flags = pd.read_csv(data_dir / "forecasting_row_manifest.csv",
-                        usecols=["pair_id", "exposure_review_flag"], dtype={"pair_id": "string"})
-    df = df[df.dataset_split.isin(["train", "validation"])]
-    df = df.merge(flags, on="pair_id", how="left", validate="one_to_one")
-    assert df.exposure_review_flag.notna().all() and df.dataset_split.ne("final_test").all()
-    return df[df.dataset_split.eq("train")], df[df.dataset_split.eq("validation")]
+    return load_development(data_dir)
 
 
 def tune_and_fit(train):
-    """Grid-search on an inner temporal holdout (last training year), then refit on all train.
+    """Select by MAE on an inner temporal holdout, then refit on all training rows.
 
     Validation rows are never used for tuning, so the leaderboard comparison stays clean.
     """
+    import lightgbm as lgb
+
     inner_fit = train[train.feature_year < 2022]
     inner_val = train[train.feature_year == 2022]
+    if inner_fit.empty or inner_val.empty:
+        raise ValueError("Inner temporal tuning requires training years before and in 2022")
     rows = []
     for values in itertools.product(*GRID.values()):
         params = dict(zip(GRID, values))
         model = lgb.LGBMRegressor(n_estimators=3000, **params, **BASE_PARAMS)
         model.fit(inner_fit[FEATURES], inner_fit[TARGET],
-                  eval_X=(inner_val[FEATURES],), eval_y=(inner_val[TARGET],), eval_metric="poisson",
-                  callbacks=[lgb.early_stopping(100, verbose=False)])
+                  eval_X=(inner_val[FEATURES],), eval_y=(inner_val[TARGET],), eval_metric="l1",
+                  callbacks=[lgb.early_stopping(100, first_metric_only=True, verbose=False)])
         pred = model.predict(inner_val[FEATURES])
         rows.append({**params, "n_estimators": model.best_iteration_,
                      "inner_deviance": mean_poisson_deviance(inner_val[TARGET], pred),
                      "inner_mae": mean_absolute_error(inner_val[TARGET], pred)})
-    tuning = pd.DataFrame(rows).sort_values("inner_deviance", ignore_index=True)
+    tuning = pd.DataFrame(rows).sort_values(["inner_mae", "inner_deviance"], ignore_index=True)
     best = tuning.iloc[0][list(GRID) + ["n_estimators"]].to_dict()
     best["num_leaves"], best["min_child_samples"], best["n_estimators"] = (
         int(best["num_leaves"]), int(best["min_child_samples"]), int(best["n_estimators"]))
@@ -97,7 +117,7 @@ def tune_and_fit(train):
     return model, best, tuning, time.perf_counter() - start
 
 
-def metrics(y, p):
+def metrics(y, p, family="poisson", alpha=None):
     return {
         "mae": mean_absolute_error(y, p),
         "rmse": root_mean_squared_error(y, p),
@@ -105,7 +125,7 @@ def metrics(y, p):
         "mean_pred": p.mean(),
         "mean_actual": y.mean(),
         "pred_to_actual_total": p.sum() / y.sum(),
-        "poisson_p0_share": np.exp(-p).mean(),  # implied P(y=0) if counts were Poisson(mu=p)
+        "implied_zero_share": implied_zero_probability(p, family, alpha).mean(),
         "observed_zero_share": (y == 0).mean(),
     }
 
@@ -114,8 +134,9 @@ def paired_bootstrap(y, p_ref, p_other, n=1000):
     """95% CI of mean(metric(ref) - metric(other)) over resampled validation rows."""
     rng = np.random.default_rng(SEED)
     d_mae = np.abs(y - p_ref) - np.abs(y - p_other)
-    dev = lambda p: 2 * (np.where(y > 0, y * np.log(np.maximum(y, EPS) / np.maximum(p, EPS)), 0)
-                         - y + p)
+    def dev(p):
+        mu = np.maximum(p, EPS)
+        return 2 * (np.where(y > 0, y * np.log(np.maximum(y, EPS) / mu), 0) - y + mu)
     d_dev = dev(p_ref) - dev(p_other)
     idx = rng.integers(0, len(y), (n, len(y)))
     return {
@@ -126,10 +147,10 @@ def paired_bootstrap(y, p_ref, p_other, n=1000):
     }
 
 
-def evaluate(val, preds, runtimes):
+def evaluate(val, preds, runtimes, families):
     """preds: {model name: prediction array aligned with val}. Returns leaderboard + bootstrap."""
     y = val[TARGET].to_numpy()
-    board = pd.DataFrame([{"model": m, **metrics(y, p), "runtime_seconds": runtimes.get(m)}
+    board = pd.DataFrame([{"model": m, **metrics(y, p, *families[m]), "runtime_seconds": runtimes.get(m)}
                           for m, p in preds.items()]).sort_values("mae", ignore_index=True)
     boot = pd.DataFrame([{"vs_model": m, **paired_bootstrap(y, preds[LGB_NAME], p)}
                          for m, p in preds.items() if m != LGB_NAME])
@@ -156,7 +177,7 @@ def save(fig, path):
 
 
 def sliced_errors(val, preds, column, bins, labels):
-    groups = pd.cut(val[column], bins=bins, labels=labels)
+    groups = pd.cut(val[column], bins=bins, labels=labels, right=False)
     rows = []
     for m, p in preds.items():
         err = pd.DataFrame({"g": groups.values, "e": p - val[TARGET].to_numpy()})  # keeps bin order
@@ -172,7 +193,7 @@ def plot_slices(table, title, xlabel, path):
     width = 0.8 / len(MODELS)
     for i, m in enumerate(MODELS):
         part = table[table.model.eq(m)].set_index("bin").reindex(bins)
-        ax.bar(np.arange(len(bins)) + (i - 2) * width, part.mae, width * 0.9,
+        ax.bar(np.arange(len(bins)) + (i - (len(MODELS) - 1) / 2) * width, part.mae, width * 0.9,
                color=COLORS[m], label=m)
     ax.set_xticks(np.arange(len(bins)), [f"{b}\n(n={n})" for b, n in
                                          table[table.model.eq(LGB_NAME)][["bin", "n"]].values])
@@ -187,36 +208,33 @@ def plot_slices(table, title, xlabel, path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, default=ROOT / "data/processed/modeling_v1")
-    parser.add_argument("--package-a-dir", type=Path, default=ROOT / "artifacts/count_regression",
-                        help="Package A artifact folder (validation_predictions.csv, model_metrics.csv)")
-    parser.add_argument("--out", type=Path, default=ROOT / "artifacts/lightgbm_forecast")
+    parser.add_argument("--package-a-dir", type=Path, default=ROOT / "artifacts/count_regression_review",
+                        help="Corrected Package A outputs, with separate primary and refitted sensitivity predictions")
+    parser.add_argument("--out", type=Path, default=ROOT / "artifacts/lightgbm_forecast_review")
     args = parser.parse_args()
+    args.out = protect_submitted_outputs(args.out, ROOT)
     args.out.mkdir(parents=True, exist_ok=True)
 
     train, val = load(args.data_dir)
     assert (len(train), len(val)) == (21785, 5019)
-    a_preds = pd.read_csv(args.package_a_dir / "validation_predictions.csv",
-                          dtype={"pair_id": "string"})
-    a_runtime = pd.read_csv(args.package_a_dir / "model_metrics.csv").set_index("model")
-    a = val[["pair_id", TARGET]].merge(a_preds, on="pair_id", how="left", validate="one_to_one")
-    assert a.actual_count.notna().all() and np.allclose(a.actual_count, a[TARGET]), \
-        "Package A predictions do not cover the same validation rows"
-    assert np.allclose(a.persistence_pred, val.dart_count_t), "Package A persistence mismatch"
-
     runs, outputs = {}, {}
-    for run, keep_train, keep_val in [
-        ("primary", np.ones(len(train), bool), np.ones(len(val), bool)),
-        ("sensitivity_excl_exposure_flags",
-         ~train.exposure_review_flag.to_numpy(), ~val.exposure_review_flag.to_numpy()),
-    ]:
-        tr, va, a_run = train[keep_train], val[keep_val], a[keep_val]
+    for run in ["primary", "sensitivity_excl_exposure_flags"]:
+        tr, va = cohort(train, val, run)
+        a_run, a_runtime = read_package_a_run(args.package_a_dir, run, va, len(tr))
+        if not np.array_equal(a_run.persistence_pred, va.dart_count_t.to_numpy()):
+            raise ValueError("Package A persistence mismatch")
         model, best, tuning, fit_seconds = tune_and_fit(tr)
         preds = {LGB_NAME: model.predict(va[FEATURES])}
         preds.update({name: a_run[col].to_numpy() for col, (name, _) in A_MODELS.items()})
         runtimes = {LGB_NAME: fit_seconds}
         runtimes.update({name: a_runtime.loc[key, "training_seconds"]
-                         for name, key in A_MODELS.values() if key in a_runtime.index})
-        board, boot = evaluate(va, preds, runtimes)
+                         for name, key in A_MODELS.values()})
+        families = {LGB_NAME: ("poisson", None)}
+        for name, key in A_MODELS.values():
+            family = ("negative_binomial" if name.startswith("Negative Binomial")
+                      else "point" if name == "Persistence" else "poisson")
+            families[name] = (family, a_runtime.loc[key, "alpha"])
+        board, boot = evaluate(va, preds, runtimes, families)
         runs[run] = {"train_rows": len(tr), "validation_rows": len(va), "best_params": best,
                          "final_fit_seconds": fit_seconds}
         outputs[run] = (tr, va, model, preds, board, boot, tuning)
@@ -227,10 +245,17 @@ def main():
         print(board.round(4).to_string(index=False))
         print(boot.round(4).to_string(index=False))
 
+    import lightgbm as lgb
+
     (args.out / "run_settings.json").write_text(json.dumps(
         {"seed": SEED, "features": FEATURES, "target": TARGET, "grid": GRID,
          "base_params": BASE_PARAMS, "tuning_holdout": "train rows with feature_year == 2022",
-         "deviance_clip": EPS, "lightgbm_version": lgb.__version__, "runs": runs}, indent=2))
+         "deviance_clip": EPS, "lightgbm_version": lgb.__version__, "runs": runs,
+         "tuning_selection_metric": "inner MAE", "early_stopping_metric": "l1",
+         "source_sha256": fingerprints([args.data_dir / "forecasting_reference.csv",
+                                        args.data_dir / "forecasting_row_manifest.csv"]),
+         "package_a_sha256": fingerprints(sorted(args.package_a_dir.glob("*.csv"))),
+         "final_test_scored": False}, indent=2))
 
     pd.concat([
         pd.DataFrame({"pair_id": va.pair_id.to_numpy(), "y_true": va[TARGET].to_numpy(),

@@ -1,0 +1,2 @@
+left,right,macro_f1_difference,ci95_low,ci95_high,resamples,method
+logreg,linear_svm,-0.0002597764664277191,-0.00589111379890424,0.0058390447024904805,300,paired row bootstrap; conditional on chosen configurations
