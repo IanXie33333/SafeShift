@@ -1,0 +1,11 @@
+true,pred,errors,share_of_true_class
+object_equipment_contact,overexertion_bodily_reaction,102,0.03447110510307536
+object_equipment_contact,transportation,78,0.026360256843528218
+overexertion_bodily_reaction,object_equipment_contact,72,0.011004126547455296
+overexertion_bodily_reaction,falls_slips_trips,68,0.01039278618370778
+falls_slips_trips,object_equipment_contact,61,0.044170890658942794
+transportation,object_equipment_contact,50,0.12195121951219512
+falls_slips_trips,overexertion_bodily_reaction,46,0.0333091962346126
+object_equipment_contact,falls_slips_trips,46,0.01554579249746536
+overexertion_bodily_reaction,transportation,17,0.002598196545926945
+harmful_exposure,object_equipment_contact,14,0.07567567567567568

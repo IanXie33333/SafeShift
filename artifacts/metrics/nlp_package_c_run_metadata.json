@@ -1,0 +1,14 @@
+{
+  "seed": 42,
+  "data_dir": "data/modeling_v1",
+  "n_train": 45670,
+  "n_validation": 11478,
+  "final_test_used": false,
+  "selected_family": "logreg",
+  "selected_config": "word_1-2gram_min3|C=10.0|cw=balanced",
+  "python": "3.13.18",
+  "sklearn": "1.9.1",
+  "pandas": "3.0.5",
+  "numpy": "2.5.3",
+  "total_seconds": 194.1
+}
