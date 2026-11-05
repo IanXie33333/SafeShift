@@ -6,15 +6,16 @@ never vectorised, predicted or scored. Hyperparameters are chosen on validation 
 
 Run (from the repository root)::
 
-    uv run --with scikit-learn --with matplotlib python src/nlp/narrative_models.py \
+    uv run --locked python src/nlp/narrative_models.py \
         --data-dir data/processed/modeling_v1 --seed 42
 
-Outputs go to ``artifacts/metrics`` and ``artifacts/figures`` (override with ``--out-dir``).
+New outputs go to ``artifacts/nlp_package_c_review``; submitted artifacts remain unchanged.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import platform
 import time
@@ -32,6 +33,7 @@ LABELS = [
 ]
 DEV_SPLITS = ("train", "validation")  # final_test is deliberately absent
 PREFIX = "nlp_package_c"
+ROOT = Path(__file__).resolve().parents[2]
 
 
 # --------------------------------------------------------------------------- data
@@ -39,17 +41,63 @@ def load_dev(data_dir: Path) -> pd.DataFrame:
     """Load train + validation rows only.
 
     The file is read in chunks and final-test rows are dropped chunk by chunk, so their text
-    is never held in memory or passed to any later step.
+    is filtered before any vectorization, prediction, or scoring.
     """
     chunks = pd.read_csv(
         data_dir / "nlp_labeled.csv", dtype=str, keep_default_na=False, chunksize=20_000
     )
     df = pd.concat([c[c["dataset_split"].isin(DEV_SPLITS)] for c in chunks], ignore_index=True)
-    assert set(df["dataset_split"]) == set(DEV_SPLITS)
+    if set(df["dataset_split"]) != set(DEV_SPLITS):
+        raise ValueError("Both development partitions are required")
+    if df["record_id"].duplicated().any():
+        raise ValueError("Narrative record IDs must be unique")
+    if not df["text"].str.strip().ne("").all():
+        raise ValueError("Development narratives must be nonempty")
     unknown = set(df["label"]) - set(LABELS)
     if unknown:
         raise ValueError(f"unexpected labels: {unknown}")
     return df
+
+
+def validate_narrative_groups(dev):
+    key = dev["text"].str.lower().str.split().str.join(" ")
+    groups = pd.DataFrame({"key": key, "split": dev["dataset_split"]})
+    if groups.groupby("key")["split"].nunique().gt(1).any():
+        raise ValueError("Identical normalized narratives cross development partitions")
+
+
+def protect_output(out_dir):
+    output = out_dir.resolve()
+    for folder in ["count_regression", "lightgbm_forecast", "metrics", "figures"]:
+        original = (ROOT / "artifacts" / folder).resolve()
+        if output == original or original in output.parents or output in original.parents:
+            raise ValueError("Submitted artifacts are protected; choose a new --out-dir")
+    return out_dir
+
+
+def paired_macro_f1(y_true, left, right, n_boot, seed):
+    """Paired row bootstrap of macro-F1 difference; no equivalence or selection correction."""
+    encode = {name: i for i, name in enumerate(LABELS)}
+    y = np.array([encode[v] for v in y_true])
+    a = np.array([encode[v] for v in left])
+    b = np.array([encode[v] for v in right])
+
+    def f1(actual, predicted):
+        matrix = np.bincount(actual * len(LABELS) + predicted,
+                             minlength=len(LABELS) ** 2).reshape(len(LABELS), len(LABELS))
+        denominator = matrix.sum(0) + matrix.sum(1)
+        return np.divide(2 * np.diag(matrix), denominator,
+                         out=np.zeros(len(LABELS)), where=denominator > 0).mean()
+
+    rng = np.random.default_rng(seed)
+    differences = []
+    for _ in range(n_boot):
+        indices = rng.integers(0, len(y), len(y))
+        differences.append(f1(y[indices], a[indices]) - f1(y[indices], b[indices]))
+    lo, hi = np.percentile(differences, [2.5, 97.5])
+    return {"left": "logreg", "right": "linear_svm", "macro_f1_difference": f1(y, a) - f1(y, b),
+            "ci95_low": float(lo), "ci95_high": float(hi), "resamples": n_boot,
+            "method": "paired row bootstrap; conditional on chosen configurations"}
 
 
 def word_count(texts: pd.Series) -> pd.Series:
@@ -425,12 +473,15 @@ def softmax(z: np.ndarray) -> np.ndarray:
 
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
-    ap.add_argument("--data-dir", type=Path, default=Path("data/processed/modeling_v1"))
-    ap.add_argument("--out-dir", type=Path, default=Path("artifacts"))
+    ap.add_argument("--data-dir", type=Path, default=ROOT / "data/processed/modeling_v1")
+    ap.add_argument("--out-dir", type=Path, default=ROOT / "artifacts/nlp_package_c_review")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--n-boot", type=int, default=300)
     ap.add_argument("--sample", type=int, default=0, help="debug: use only N train rows")
     args = ap.parse_args(argv)
+    args.out_dir = protect_output(args.out_dir)
+    if args.n_boot < 1:
+        raise ValueError("--n-boot must be positive")
 
     import sklearn
 
@@ -440,13 +491,16 @@ def main(argv: list[str] | None = None) -> None:
     fig_dir.mkdir(parents=True, exist_ok=True)
 
     dev = load_dev(args.data_dir)
+    validate_narrative_groups(dev)
     train = dev[dev["dataset_split"] == "train"].reset_index(drop=True)
     val = dev[dev["dataset_split"] == "validation"].reset_index(drop=True)
+    if (len(train), len(val)) != (45670, 11478):
+        raise ValueError("Expected frozen v1 NLP partitions: 45,670 train and 11,478 validation")
     if args.sample:
         train = train.sample(args.sample, random_state=args.seed).reset_index(drop=True)
     print(f"train={len(train):,} validation={len(val):,} (final_test rows dropped at load)")
 
-    grid, fitted, mats = run_grid(train, val, args.seed)
+    grid, fitted, _mats = run_grid(train, val, args.seed)
     grid.sort_values("macro_f1", ascending=False).to_csv(
         metrics_dir / f"{PREFIX}_grid.csv", index=False
     )
@@ -479,6 +533,9 @@ def main(argv: list[str] | None = None) -> None:
     best["macro_f1_ci95_low"] = best["family"].map(lambda f: ci.get(f, (np.nan, np.nan))[0])
     best["macro_f1_ci95_high"] = best["family"].map(lambda f: ci.get(f, (np.nan, np.nan))[1])
     best.to_csv(metrics_dir / f"{PREFIX}_comparison.csv", index=False)
+    pd.DataFrame([paired_macro_f1(y_va, preds["logreg"], preds["linear_svm"],
+                                  args.n_boot, args.seed)]).to_csv(
+        metrics_dir / f"{PREFIX}_paired_comparison.csv", index=False)
     print(
         "\nBest per family:\n",
         best[["family", "config", "macro_f1", "weighted_f1", "accuracy"]].to_string(index=False),
@@ -489,7 +546,7 @@ def main(argv: list[str] | None = None) -> None:
     )
 
     # Diagnostics model: fixed to logistic regression (it gives real probabilities). The top
-    # two families are statistically tied, and which one edges ahead can flip between machines.
+    # two families have similar validation scores; their order can flip between environments.
     sel = best[best["family"] == "logreg"].iloc[0]
     sel_pred = preds[sel["family"]]
     est, Xva, _ = fitted[(sel["family"], sel["config"])]
@@ -503,7 +560,7 @@ def main(argv: list[str] | None = None) -> None:
     classes = est.classes_
     assert list(classes) == sorted(LABELS) or set(classes) == set(LABELS)
 
-    # Diagnostics with the best LR too (real probabilities for confidence analysis).
+    # Probabilities are assessed against provided machine labels, not expert correctness.
     lr_rows = best[best["family"] == "logreg"]
     if len(lr_rows):
         lr_est, lr_X, lr_pred = fitted[("logreg", lr_rows.iloc[0]["config"])]
@@ -561,6 +618,10 @@ def main(argv: list[str] | None = None) -> None:
         "sklearn": sklearn.__version__,
         "pandas": pd.__version__,
         "numpy": np.__version__,
+        "source_sha256": hashlib.sha256((args.data_dir / "nlp_labeled.csv").read_bytes()).hexdigest(),
+        "labels": "provided machine-assigned categories; not expert ground truth",
+        "confidence_note": "Scores support review prioritization; probabilities are not validated expert correctness",
+        "bootstrap_note": "Row resampling excludes tuning and temporal-shift uncertainty",
         "total_seconds": round(time.perf_counter() - t_start, 1),
     }
     (metrics_dir / f"{PREFIX}_run_metadata.json").write_text(json.dumps(meta, indent=2))

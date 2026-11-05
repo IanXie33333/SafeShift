@@ -1,0 +1,89 @@
+{
+  "seed": 42,
+  "features": [
+    "dart_count_t",
+    "employee_count_t",
+    "hours_worked_t"
+  ],
+  "target": "dart_count_t1",
+  "grid": {
+    "num_leaves": [
+      7,
+      15,
+      31
+    ],
+    "learning_rate": [
+      0.03,
+      0.1
+    ],
+    "min_child_samples": [
+      20,
+      100
+    ],
+    "reg_lambda": [
+      0.0,
+      1.0
+    ]
+  },
+  "base_params": {
+    "objective": "poisson",
+    "metric": "l1",
+    "random_state": 42,
+    "deterministic": true,
+    "force_row_wise": true,
+    "n_jobs": 1,
+    "verbose": -1
+  },
+  "tuning_holdout": "train rows with feature_year == 2022",
+  "deviance_clip": 1e-10,
+  "lightgbm_version": "4.7.0",
+  "runs": {
+    "primary": {
+      "train_rows": 21785,
+      "validation_rows": 5019,
+      "best_params": {
+        "num_leaves": 7,
+        "learning_rate": 0.03,
+        "min_child_samples": 100,
+        "reg_lambda": 1.0,
+        "n_estimators": 438
+      },
+      "final_fit_seconds": 0.17265929200220853
+    },
+    "sensitivity_excl_exposure_flags": {
+      "train_rows": 21647,
+      "validation_rows": 4990,
+      "best_params": {
+        "num_leaves": 7,
+        "learning_rate": 0.03,
+        "min_child_samples": 100,
+        "reg_lambda": 0.0,
+        "n_estimators": 410
+      },
+      "final_fit_seconds": 0.17107104198657908
+    }
+  },
+  "tuning_selection_metric": "inner MAE",
+  "early_stopping_metric": "l1",
+  "source_sha256": {
+    "forecasting_reference.csv": "44f51a9849a43be9e627ca9dd7a38b5dce3871ceaadfa2070c55513845321981",
+    "forecasting_row_manifest.csv": "5395796e53011cb70623568a1cc9135a64e3576de6b710cf427e50b4b29b95da"
+  },
+  "package_a_sha256": {
+    "calibration.csv": "937bd35f7f37f83ec24b066d3ad15dfa4a83f379dc7405a212d2fadda4cb185a",
+    "calibration_sensitivity_excl_exposure_flags.csv": "d089c087bd42a8184bd2d84e1d42f3d809db952bc3692c95f273ba33e1d57a09",
+    "coefficients.csv": "083627ea7f7fb1582d6e16f84ae177aac7e98ae7a0d0db8aa9568b68c71eaf58",
+    "coefficients_sensitivity_excl_exposure_flags.csv": "f17cb7fd4da1ec1a16457017e2a5fc33a6f51ac83a888b3192f997bb407e9c31",
+    "exposure_flag_audit_summary.csv": "e05314396e3f5ade33bd125768ddf57ca5dda2828e8219e16ee3366510f9f1e1",
+    "exposure_flagged_development_rows.csv": "7632b2c005d6b639f43be72b56c45703047027a9064bb762f18e6ce54b0ed814",
+    "largest_prediction_errors.csv": "4d3d249e7129b9baad9080295b5e3348449460f03dec3c323637a1c82ba4caef",
+    "largest_prediction_errors_sensitivity_excl_exposure_flags.csv": "bc57f390ec994118ee7adae17e70914e0f9cf37adda2868d8a1346c35daa0dd7",
+    "model_metrics.csv": "4b78fab9b5353c89b6b1bcaf9d17964c018555fefc98041cc65ff269b9285448",
+    "model_metrics_sensitivity_excl_exposure_flags.csv": "8d2ed9a815707aeaacc1744382cce4b3bd979ff4ecbbf7c929676cc50abb6455",
+    "poisson_log_tuning.csv": "5addfe21994d0a551858d64f4f206f363c156d4cc6d04567647d644f7a0b47b8",
+    "poisson_log_tuning_sensitivity_excl_exposure_flags.csv": "d368ac32acfe9c9469a86d183e9c9837dd6f07daa8c36f9d5556c78fbf3c732b",
+    "validation_predictions.csv": "d6ab037b242bf5fa74088bc4da7f63c05357721fe0ce6e04444f9f1c1881f05a",
+    "validation_predictions_sensitivity_excl_exposure_flags.csv": "343da8c69661b81566fefd292b810c7b1bb7a593e7a18d320a4cf9e450490294"
+  },
+  "final_test_scored": false
+}

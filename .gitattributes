@@ -1,0 +1,3 @@
+
+# Preserve whitespace within exported CSV data fields.
+artifacts/**/*.csv -whitespace

@@ -1,0 +1,18 @@
+model,feature,coefficient,scale
+Poisson,intercept,1.7302386371781977,standardized
+Poisson,dart_count_t,0.2608360559305459,standardized
+Poisson,employee_count_t,0.026944361527605334,standardized
+Poisson,hours_worked_t,0.03604463086527308,standardized
+Poisson (log features),intercept,0.9297939657807419,standardized log1p
+Poisson (log features),dart_count_t,0.765038328865584,standardized log1p
+Poisson (log features),employee_count_t,0.3274586821945302,standardized log1p
+Poisson (log features),hours_worked_t,0.1817450103093988,standardized log1p
+Negative Binomial,const,-0.5450309701869269,log1p
+Negative Binomial,dart_count_t,0.745430043535122,log1p
+Negative Binomial,employee_count_t,0.6452184176638373,log1p
+Negative Binomial,hours_worked_t,-0.19416137782778115,log1p
+Negative Binomial (Estimated Alpha),const,-0.5475989512718513,log1p
+Negative Binomial (Estimated Alpha),dart_count_t,0.7503958509937043,log1p
+Negative Binomial (Estimated Alpha),employee_count_t,0.6275719474088578,log1p
+Negative Binomial (Estimated Alpha),hours_worked_t,-0.18759101966268552,log1p
+Negative Binomial (Estimated Alpha),alpha,0.6718908895222752,NB2 dispersion
