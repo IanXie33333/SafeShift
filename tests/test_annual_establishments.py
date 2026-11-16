@@ -1,4 +1,3 @@
-
 """Tests for annual warehouse establishment analysis."""
 
 from pathlib import Path
@@ -27,7 +26,7 @@ def test_dart_rate_uses_total_hours():
         "dart_count": [10, 20],
         "total_dafw_cases": [6, 12],
         "total_djtr_cases": [4, 8],
-        "total_hours_worked": [100_000, 200_000],
+        "total_hours_worked": [100_000, 400_000],
         "annual_average_employees": [25, 30],
     })
 
@@ -38,8 +37,8 @@ def test_dart_rate_uses_total_hours():
     assert result.iloc[0]["dafw_case_count"] == 18
     assert result.iloc[0]["djtr_case_count"] == 12
     assert result.iloc[0]["dart_case_count"] == 30
-    assert result.iloc[0]["hours_sum"] == 300_000
-    assert result.iloc[0]["dart_rate"] == 20.0
+    assert result.iloc[0]["hours_sum"] == 500_000
+    assert result.iloc[0]["dart_rate"] == 12.0
     assert pd.isna(result.iloc[0]["dafw_days_sum"])
     assert pd.isna(result.iloc[0]["djtr_days_sum"])
     assert result.iloc[0]["dafw_days_status"] == "blocked_review"
@@ -59,6 +58,20 @@ def test_size_group_boundaries(tmp_path: Path):
         "annual_average_employees": employees,
     })
 
+    # The loader now validates the complete cleaned-input contract.
+    data["id"] = range(1, 8)
+    data["year"] = 2024
+    data["establishment_id"] = [str(i) for i in range(1, 8)]
+    data["naics_code"] = "493110"
+    data["establishment_name"] = "Synthetic"
+    data["source_file"] = "synthetic.csv"
+    data["source_record"] = range(1, 8)
+    data["total_hours_worked"] = data["annual_average_employees"] * 2000
+    data["total_dafw_cases"] = 1
+    data["total_djtr_cases"] = 1
+    data["dart_count"] = 2
+    data["total_dafw_days"] = 1
+    data["total_djtr_days"] = 1
     input_path = tmp_path / "test_warehouses.csv"
     data.to_csv(input_path, index=False)
 
@@ -187,8 +200,8 @@ def test_create_day_anomaly_audit():
 
     audit = create_day_anomaly_audit(data)
 
-    assert len(audit) == 2
-    assert set(audit["measure"]) == {"dafw", "djtr"}
+    assert len(audit) == 4
+    assert set(audit["measure"]) == {"dafw", "djtr", "combined"}
 
     dafw = audit[audit["measure"] == "dafw"].iloc[0]
     assert dafw["establishment_id"] == 101
@@ -199,8 +212,9 @@ def test_create_day_anomaly_audit():
     djtr = audit[audit["measure"] == "djtr"].iloc[0]
     assert djtr["establishment_id"] == 102
     assert djtr["reported_days"] == 300
-    assert not djtr["high_days_per_case"]
-    assert djtr["positive_days_zero_cases"]
+    assert djtr["high_days_per_case"]
+    assert not djtr["positive_days_zero_cases"]
+    assert djtr["review_case_count"] == 1
 
     assert (audit["disposition"] == "pending_review").all()
 

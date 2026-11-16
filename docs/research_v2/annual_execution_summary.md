@@ -1,76 +1,33 @@
-# WP1 Annual Establishment Patterns — Execution Summary
+# WP1 execution summary after the local-review patch
 
-## Input and reproducibility
+The original PR reported 72,394 source rows, 72,235 primary rows, 71,607 exposure-
+sensitivity rows, and 80 size-summary rows. The fixed implementation reproduced
+those counts and all original count/exposure/rate values on the available snapshot.
+The sixteen regression tests and ten existing WP1 test functions were exercised
+during patch preparation. The complete locked-environment project test suite and
+Ruff must run on the owner's checkout using the bundled local verification script.
 
-- Source: `data/processed/warehouses_4931.csv`
-- Source rows: 72,394 (2016–2025)
-- Source SHA-256: `07bfdc020cd221741e919077e328643ff2e528e81ece1fc7e3b772dc10d2917d`
-- Python: 3.14.7
-- pandas: 2.3.3
-- NumPy: 2.5.3
-- Base Git revision: `6a6a7033da86e551556ccc4a6191013dba4c0995`
-- WP1 deliverables commit: f22cc99f0267f775e05caf20ee1dae0e02faaca5
-- Full source-year counts: `artifacts/research_v2/annual/source_run_manifest.json`
+The original source and runtime metadata describe Charles's historical run. For
+the actual refreshed run, use `artifacts/research_v2/annual/source_run_manifest.json`:
+it is now generated, not manually maintained. It records the real input hash,
+source-year counts, code hashes, Git revision/dirty status, runtime versions,
+parameters, output hashes and row counts, and successful reconciliation checks.
+The available review snapshot and Charles's source have different file hashes;
+no exact-input identity is assumed by the patch.
 
-Execution command (repository root):
+The documented CLI regenerates all seven release files. Existing files require
+`--overwrite`; the local patch runner backs up original WP1 code/outputs first.
+The independent verifier compares the refreshed counts and rates with both the
+source facts and the backed-up pre-patch summary. Original modeling artifacts,
+modeling code, locked dependencies, and the annual source are checksum-protected
+by the runner throughout local verification.
 
-```bash
-uv run --locked python -m src.analysis.annual_establishments
-```
+The revised day audit uses total DART cases, includes a combined-day screen,
+and no longer flags ordinary restricted-day/DAFW-case combinations by themselves.
+There are 446 measure-level flags in the supplied snapshot. DAFW and DJTR totals
+remain blank and `blocked_review`; raw-value review is still outstanding.
 
-## Cohort reconciliation
-
-| Measure | Records |
-|---|---:|
-| Input establishment-years | 72,394 |
-| Primary eligible | 72,235 |
-| Structurally excluded | 159 |
-| Failed NAICS flag | 0 |
-| Failed core-fields flag | 89 |
-| Failed unique-key flag | 70 |
-| Exposure-sensitivity eligible | 71,607 |
-| Excluded from sensitivity | 628 |
-
-The three structural failure counts total 159, equal to the unique excluded count. No overlapping structural failures were observed in this source snapshot.
-
-## Generated outputs
-
-- `data/processed/research_v2/annual_size_summary.csv` — 80 rows
-- `data/processed/research_v2/annual_coverage.csv` — 20 rows
-- `artifacts/research_v2/annual/day_anomaly_audit.csv` — 4,351 flagged entries
-- `artifacts/research_v2/annual/coverage_reconciliation.csv`
-- `artifacts/research_v2/annual/scenario_comparison.csv` — 40 comparisons
-- `artifacts/research_v2/annual/tableau_reference_totals.csv` — 20 rows
-
-## Checks completed
-
-- Automated test suite previously reported passing (47 tests)
-- Input-to-primary structural counts reconciled
-- Primary-to-sensitivity counts reconciled
-- Contributing hours matched size-group summaries across all 20 year/scenario combinations (maximum difference: 0)
-- DAFW and DJTR availability counts matched size-group summaries (maximum differences: 0)
-- Scenario comparison contained 40 year/size combinations with no missing comparison values
-- Tableau reference DART cases equaled DAFW plus DJTR cases
-- Source/run manifest passed JSON syntax validation
-
-## Important 2025 exposure anomaly
-
-One 2025 establishment-year reported 100,551,000,000 hours, representing 97.02% of the 2025 primary cohort's reported hours.
-
-- Primary 2025 DART rate: 0.103
-- Rate excluding only the largest-hours record: 3.463
-- Exposure-sensitivity 2025 DART rate: 3.658
-
-This demonstrates substantial denominator sensitivity. The original record has not been altered.
-
-## Unresolved limitations
-
-- DAFW and DJTR day totals remain `blocked_review`; reported-day findings are not approved
-- The day anomaly audit requires further review
-- Reporting coverage varies by year; results are descriptive patterns among reporting establishments, not nationally representative incidence estimates
-- The existing model-result checksum verifier and its manifest have not yet been confirmed
-- Final source-code revision and remaining acceptance checks require verification before PR submission
-
-## Findings
-
-See `docs/research_v2/annual_findings.md` for four candidate findings and their numerical evidence.
+The 2025 exposure anomaly and the four candidate findings in `annual_findings.md`
+remain unchanged. Neither automatic clipping nor a new forecasting/modeling run
+is part of this patch. The generated manifest and local backup's verification
+receipt are the authoritative records of the owner's successful execution.

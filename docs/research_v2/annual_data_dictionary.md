@@ -1,4 +1,3 @@
-
 # WP1 — Annual Data Dictionary
 
 ## 1. Annual Size Summary
@@ -136,8 +135,10 @@ The sum of `establishment_year_count` across size groups must equal `establishme
 
 | Column | Definition |
 |---|---|
-| `high_days_per_case` | Whether reported days exceed 180 per corresponding case |
-| `positive_days_zero_cases` | Whether reported days are positive with zero corresponding cases |
+| `high_days_per_case` | Whether reported days exceed 180 times `review_case_count` (total DART cases) |
+| `positive_days_zero_cases` | Whether reported days are positive with zero total DART cases |
+| `review_case_count` | Explicit denominator for screening; always total DART cases |
+| `invalid_day_value` | Individual day value is missing, nonnumeric, negative, or fractional |
 | `disposition` | Review status, initially `pending_review` |
 
 ### Interpretation Notes
@@ -147,3 +148,17 @@ The sum of `establishment_year_count` across size groups must equal `establishme
 - Source references support tracing observations back to OSHA ITA records.
 - No automatic capping, replacement, or exclusion is applied to flagged day values.
 - DAFW and DJTR day totals remain blocked pending review.
+
+## Review patch notes
+
+The anomaly `measure` can be `dafw`, `djtr`, or `combined`. `reported_cases`
+preserves the original corresponding case count; `review_case_count` supplies
+the DART-based screening population. Positive restricted days with only DAFW
+cases are not alone a reason for an anomaly flag. Combined screening requires
+two numerically valid day values. Flags remain pending review, not exclusions.
+
+Coverage includes both scenarios for every source year. Zero-row scenarios
+have zero counts/hours and missing rates. Summary rows remain observed size
+groups only; no subtotal rows are appended. The public summary's counts,
+exposures, rates, day-availability fields, and blocked day statuses retain their
+existing definitions.

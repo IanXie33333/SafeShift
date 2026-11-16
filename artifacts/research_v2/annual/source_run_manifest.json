@@ -1,6 +1,7 @@
 {
+  "analysis_version": "wp1-review-fix-v1",
   "source_file": "data/processed/warehouses_4931.csv",
-  "source_sha256": "07bfdc020cd221741e919077e328643ff2e528e81ece1fc7e3b772dc10d2917d",
+  "source_sha256": "22170061277d226f24f1d9c92995ffe1c0408257258ad3215e48c19db56a054a",
   "source_rows": 72394,
   "source_rows_by_year": {
     "2016": 4463,
@@ -14,9 +15,61 @@
     "2024": 9885,
     "2025": 9238
   },
-  "python_version": "3.14.7",
+  "run_created_utc": "2026-11-16T22:59:09.207910+00:00",
+  "python_version": "3.13.9",
   "pandas_version": "2.3.3",
   "numpy_version": "2.5.3",
-  "git_revision": "6a6a7033da86e551556ccc4a6191013dba4c0995",
-  "run_command": "uv run --locked python -m src.analysis.annual_establishments"
+  "git_revision": "772f1410a7040d6b81603d05f2f0f9a7b62b56da",
+  "git_worktree_dirty": true,
+  "code_sha256": {
+    "annual_establishments.py": "cba6cabc3de7f02689f4e6c4ee478317c0cdcd126279cf55d53bd27723b841ef",
+    "annual_review_utils.py": "b836c1aa7c6cfe0e1a75c6422aab756300e994b9be50de53b9a0a9610eb22a2c"
+  },
+  "run_command": "python -m src.analysis.annual_establishments --overwrite",
+  "exposure_hours_per_employee_inclusive": [
+    100,
+    8784
+  ],
+  "day_status": "blocked_review",
+  "day_review_denominator": "dart_count",
+  "qa_checks": {
+    "input_validated": true,
+    "unique_summary_keys": true,
+    "coverage_reconciles": true,
+    "direct_totals_reconcile": true,
+    "pooled_rates_reconcile": true,
+    "day_totals_remain_blocked": true
+  },
+  "outputs": {
+    "annual_size_summary.csv": {
+      "path": "data/processed/research_v2/annual_size_summary.csv",
+      "rows": 80,
+      "sha256": "ff3604425b9e71b5ee63c9ac32c6491d53c23182b2210c5aea63e151603cb5ed"
+    },
+    "annual_coverage.csv": {
+      "path": "data/processed/research_v2/annual_coverage.csv",
+      "rows": 20,
+      "sha256": "104926575059dc2e7bc61965441de381c5e8a6721845dbe1410ebf3154c7265c"
+    },
+    "day_anomaly_audit.csv": {
+      "path": "artifacts/research_v2/annual/day_anomaly_audit.csv",
+      "rows": 446,
+      "sha256": "2a35c3ec03cf39d54266d59ab8944266274895a9fa4f9399358c5924f6470ece"
+    },
+    "coverage_reconciliation.csv": {
+      "path": "artifacts/research_v2/annual/coverage_reconciliation.csv",
+      "rows": 20,
+      "sha256": "104926575059dc2e7bc61965441de381c5e8a6721845dbe1410ebf3154c7265c"
+    },
+    "scenario_comparison.csv": {
+      "path": "artifacts/research_v2/annual/scenario_comparison.csv",
+      "rows": 40,
+      "sha256": "0d4574d65c87eebb728a259a152d6233f6a875b1697ae824a0217eb373f94b83"
+    },
+    "tableau_reference_totals.csv": {
+      "path": "artifacts/research_v2/annual/tableau_reference_totals.csv",
+      "rows": 20,
+      "sha256": "918620d7a20e9b72510dc5297c32b82c5cdb575ff9148d9f1c4f94fe75380895"
+    }
+  }
 }
