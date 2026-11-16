@@ -1,0 +1,22 @@
+{
+  "source_file": "data/processed/warehouses_4931.csv",
+  "source_sha256": "07bfdc020cd221741e919077e328643ff2e528e81ece1fc7e3b772dc10d2917d",
+  "source_rows": 72394,
+  "source_rows_by_year": {
+    "2016": 4463,
+    "2017": 5041,
+    "2018": 6151,
+    "2019": 6431,
+    "2020": 6803,
+    "2021": 7117,
+    "2022": 7937,
+    "2023": 9328,
+    "2024": 9885,
+    "2025": 9238
+  },
+  "python_version": "3.14.7",
+  "pandas_version": "2.3.3",
+  "numpy_version": "2.5.3",
+  "git_revision": "6a6a7033da86e551556ccc4a6191013dba4c0995",
+  "run_command": "uv run --locked python -m src.analysis.annual_establishments"
+}
