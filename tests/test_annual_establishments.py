@@ -242,6 +242,9 @@ def test_coverage_reconciliation(tmp_path):
     raw = pd.DataFrame({
         "year": [2024, 2024, 2024],
         "id": [1, 2, 3],
+        "is_naics_4931": [True, True, True],
+        "core_fields_valid": [True, True, False],
+        "establishment_year_unique": [True, True, True],
     })
 
     scenarios = pd.DataFrame({
@@ -287,6 +290,9 @@ def test_summary_matches_coverage():
     raw = pd.DataFrame({
         "year": [2024, 2024, 2024],
         "id": [1, 2, 3],
+        "is_naics_4931": [True, True, True],
+        "core_fields_valid": [True, True, False],
+        "establishment_year_unique": [True, True, True],
     })
 
     scenarios = pd.DataFrame({

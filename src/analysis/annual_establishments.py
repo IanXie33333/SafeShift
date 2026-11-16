@@ -218,6 +218,8 @@ def summarize_annual(scenarios: pd.DataFrame) -> pd.DataFrame:
 
 
 # Coverage summary function
+
+# Coverage summary function
 def summarize_coverage(
     scenarios: pd.DataFrame,
     raw: pd.DataFrame,
@@ -227,15 +229,38 @@ def summarize_coverage(
         scenarios.groupby(["year", "scenario"])
         .agg(
             establishment_years=("id", "size"),
+            contributing_hours=("total_hours_worked", "sum"),
             dart_missing=("dart_count", lambda x: x.isna().sum()),
             hours_missing=("total_hours_worked", lambda x: x.isna().sum()),
             days_away_missing=("total_dafw_days", lambda x: x.isna().sum()),
+            dafw_days_available=("total_dafw_days", lambda x: valid_day_values(x).sum()),
             restricted_days_missing=("total_djtr_days", lambda x: x.isna().sum()),
+            djtr_days_available=("total_djtr_days", lambda x: valid_day_values(x).sum()),
         )
         .reset_index()
     )
 
     input_counts = raw.groupby("year").size().rename("input_records")
+
+    flags = [
+        "is_naics_4931",
+        "core_fields_valid",
+        "establishment_year_unique",
+    ]
+
+    failed = ~raw[flags].astype(bool)
+
+    exclusion_counts = (
+        failed.assign(year=raw["year"])
+        .groupby("year")
+        .sum()
+        .rename(columns={
+            "is_naics_4931": "excluded_naics",
+            "core_fields_valid": "excluded_core_fields",
+            "establishment_year_unique": "excluded_duplicate_key",
+        })
+        .reset_index()
+    )
 
     primary_counts = (
         scenarios.loc[scenarios["scenario"] == "primary"]
@@ -253,6 +278,14 @@ def summarize_coverage(
 
     coverage = coverage.merge(
         primary_counts,
+        on="year",
+        how="left",
+        validate="many_to_one",
+    )
+
+    # Add exclusion counts by reason
+    coverage = coverage.merge(
+        exclusion_counts,
         on="year",
         how="left",
         validate="many_to_one",
