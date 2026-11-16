@@ -9,7 +9,7 @@
 - pandas: 2.3.3
 - NumPy: 2.5.3
 - Base Git revision: `6a6a7033da86e551556ccc4a6191013dba4c0995`
-- Final submitted revision: pending commit
+- WP1 deliverables commit: f22cc99f0267f775e05caf20ee1dae0e02faaca5
 - Full source-year counts: `artifacts/research_v2/annual/source_run_manifest.json`
 
 Execution command (repository root):
