@@ -1,0 +1,339 @@
+
+"""Annual warehouse establishment patterns, 2016–2025."""
+
+from pathlib import Path
+
+import pandas as pd
+
+import argparse
+
+
+SIZE_LABELS = [
+    "lt_50",
+    "50_249",
+    "250_999",
+    "1000_plus",
+]
+
+
+# Day value validation function
+def valid_day_values(values: pd.Series) -> pd.Series:
+    """Identify nonmissing, nonnegative, whole-number day values."""
+    numeric = pd.to_numeric(values, errors="coerce")
+
+    return (
+        numeric.notna()
+        & (numeric >= 0)
+        & (numeric % 1 == 0)
+    )
+
+
+# High days per case flag function
+def flag_high_days_per_case(
+    days: pd.Series,
+    cases: pd.Series,
+    threshold: float = 180,
+) -> pd.Series:
+    """Flag day counts exceeding 180 days per reported case."""
+    numeric_days = pd.to_numeric(days, errors="coerce")
+    numeric_cases = pd.to_numeric(cases, errors="coerce")
+
+    return (
+        (numeric_days > 0)
+        & (numeric_cases > 0)
+        & (numeric_days > threshold * numeric_cases)
+    )
+
+
+# Day anomaly audit function
+def create_day_anomaly_audit(primary: pd.DataFrame) -> pd.DataFrame:
+    """Create a record-level audit of suspicious reported day values."""
+    audits = []
+
+    for measure, days_col, cases_col in [
+        ("dafw", "total_dafw_days", "total_dafw_cases"),
+        ("djtr", "total_djtr_days", "total_djtr_cases"),
+    ]:
+        high_ratio = flag_high_days_per_case(
+            primary[days_col], primary[cases_col]
+        )
+        zero_cases = (
+            (primary[days_col] > 0)
+            & (primary[cases_col] == 0)
+        )
+
+        flagged = high_ratio | zero_cases
+
+        records = primary.loc[flagged, [
+            "year",
+            "establishment_id",
+            "establishment_name",
+            "source_file",
+            "source_record",
+            days_col,
+            cases_col,
+            "dart_count",
+        ]].copy()
+
+        records = records.rename(columns={
+            days_col: "reported_days",
+            cases_col: "reported_cases",
+        })
+
+        records["measure"] = measure
+        records["high_days_per_case"] = high_ratio.loc[flagged].to_numpy()
+        records["positive_days_zero_cases"] = (
+            zero_cases.loc[flagged].to_numpy()
+        )
+        records["disposition"] = "pending_review"
+
+        audits.append(records)
+
+    return pd.concat(audits, ignore_index=True)
+
+
+# Primary cohort loading function
+def load_primary_cohort(input_path: Path) -> pd.DataFrame:
+    """Load structurally eligible warehouse-year records."""
+    df = pd.read_csv(input_path, low_memory=False)
+
+    eligible = (
+        df["is_naics_4931"]
+        & df["core_fields_valid"]
+        & df["establishment_year_unique"]
+    )
+
+    primary = df.loc[eligible].copy()
+
+    primary["size_group"] = pd.cut(
+        primary["annual_average_employees"],
+        bins=[0, 50, 250, 1000, float("inf")],
+        labels=SIZE_LABELS,
+        right=False,
+    )
+
+    if primary["size_group"].isna().any():
+        raise ValueError("Some eligible records have no size group")
+
+    return primary
+
+
+# Scenario creation function
+def create_scenarios(primary: pd.DataFrame) -> pd.DataFrame:
+    """Create primary and exposure-sensitivity analysis cohorts."""
+    primary = primary.copy()
+    primary["scenario"] = "primary"
+
+    employees = primary["annual_average_employees"]
+    hours = primary["total_hours_worked"]
+
+    hours_per_employee = hours / employees
+
+    valid_exposure = (
+        (employees > 0)
+        & (hours > 0)
+        & (hours_per_employee >= 100)
+        & (hours_per_employee <= 8784)
+    )
+
+    sensitivity = primary.loc[valid_exposure].copy()
+    sensitivity["scenario"] = "exposure_sensitivity"
+
+    return pd.concat([primary, sensitivity], ignore_index=True)
+
+
+# Annual summary function
+def summarize_annual(scenarios: pd.DataFrame) -> pd.DataFrame:
+    """Aggregate warehouse-year records by year, size, and scenario."""
+
+    scenarios = scenarios.copy()
+
+    for prefix, column in [
+        ("dafw", "total_dafw_days"),
+        ("djtr", "total_djtr_days"),
+    ]:
+        # Include valid zeros, but exclude missing and malformed values.
+        if column in scenarios.columns:
+            eligible = valid_day_values(scenarios[column])
+        else:
+            eligible = pd.Series(False, index=scenarios.index)
+
+        scenarios[f"{prefix}_days_eligible"] = eligible.astype(int)
+
+        scenarios[f"{prefix}_days_eligible_dart"] = (
+            scenarios["dart_count"].where(eligible, 0)
+        )
+
+    summary = (
+        scenarios.groupby(
+            ["year", "size_group", "scenario"],
+            observed=True,
+        )
+        .agg(
+            establishment_year_count=("id", "size"),
+            employee_count_sum=("annual_average_employees", "sum"),
+            hours_sum=("total_hours_worked", "sum"),
+            dafw_case_count=("total_dafw_cases", "sum"),
+            djtr_case_count=("total_djtr_cases", "sum"),
+            dart_case_count=("dart_count", "sum"),
+            dafw_days_eligible_establishment_years=(
+                "dafw_days_eligible", "sum"
+            ),
+            djtr_days_eligible_establishment_years=(
+                "djtr_days_eligible", "sum"
+            ),
+            dafw_days_cohort_dart_count=(
+                "dafw_days_eligible_dart", "sum"
+            ),
+            djtr_days_cohort_dart_count=(
+                "djtr_days_eligible_dart", "sum"
+            ),
+        )
+        .reset_index()
+    )
+
+    size_order = {
+        "lt_50": 1,
+        "50_249": 2,
+        "250_999": 3,
+        "1000_plus": 4,
+    }
+
+    summary["size_group_order"] = (
+        summary["size_group"].map(size_order).astype(int)
+    )
+
+    summary["dart_rate"] = (
+        200_000 * summary["dart_case_count"]
+        / summary["hours_sum"].where(summary["hours_sum"] > 0)
+    )
+
+    summary["dafw_days_sum"] = float("nan")
+    summary["djtr_days_sum"] = float("nan")
+
+    summary["dafw_days_status"] = "blocked_review"
+    summary["djtr_days_status"] = "blocked_review"
+
+    return summary
+
+
+# Coverage summary function
+def summarize_coverage(
+    scenarios: pd.DataFrame,
+    raw: pd.DataFrame,
+) -> pd.DataFrame:
+    """Count eligible warehouse-year records by year and scenario."""
+    coverage = (
+        scenarios.groupby(["year", "scenario"])
+        .agg(
+            establishment_years=("id", "size"),
+            dart_missing=("dart_count", lambda x: x.isna().sum()),
+            hours_missing=("total_hours_worked", lambda x: x.isna().sum()),
+            days_away_missing=("total_dafw_days", lambda x: x.isna().sum()),
+            restricted_days_missing=("total_djtr_days", lambda x: x.isna().sum()),
+        )
+        .reset_index()
+    )
+
+    input_counts = raw.groupby("year").size().rename("input_records")
+
+    primary_counts = (
+        scenarios.loc[scenarios["scenario"] == "primary"]
+        .groupby("year")
+        .size()
+        .rename("primary_records")
+    )
+
+    coverage = coverage.merge(
+        input_counts,
+        on="year",
+        how="left",
+        validate="many_to_one",
+    )
+
+    coverage = coverage.merge(
+        primary_counts,
+        on="year",
+        how="left",
+        validate="many_to_one",
+    )
+
+    coverage["structurally_excluded"] = (
+        coverage["input_records"] - coverage["primary_records"]
+    )
+
+    sensitivity_counts = (
+        scenarios.loc[
+            scenarios["scenario"] == "exposure_sensitivity"
+        ]
+        .groupby("year")
+        .size()
+        .rename("sensitivity_records")
+    )
+
+    coverage = coverage.merge(
+        sensitivity_counts,
+        on="year",
+        how="left",
+        validate="many_to_one",
+    )
+
+    coverage["exposure_excluded"] = (
+        coverage["primary_records"]
+        - coverage["sensitivity_records"]
+    )
+
+    return coverage
+
+
+# Main function.
+def main() -> None:
+    """Generate annual summary, coverage, and anomaly audit CSVs."""
+    parser = argparse.ArgumentParser(
+        description="Generate annual warehouse establishment summaries."
+    )
+    parser.add_argument(
+        "--input",
+        type=Path,
+        default=Path("data/processed/warehouses_4931.csv"),
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("data/processed/research_v2"),
+    )
+    parser.add_argument(
+        "--audit-dir",
+        type=Path,
+        default=Path("artifacts/research_v2/annual"),
+    )
+    args = parser.parse_args()
+
+    input_path = args.input
+    output_dir = args.output_dir
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    audit_dir = args.audit_dir
+    audit_dir.mkdir(parents=True, exist_ok=True)
+
+    raw = pd.read_csv(input_path, low_memory=False)
+    primary = load_primary_cohort(input_path)
+    scenarios = create_scenarios(primary)
+
+    summary = summarize_annual(scenarios)
+    coverage = summarize_coverage(scenarios, raw)
+    audit = create_day_anomaly_audit(primary)
+
+    summary.to_csv(output_dir / "annual_size_summary.csv", index=False)
+    coverage.to_csv(output_dir / "annual_coverage.csv", index=False)
+    audit.to_csv(audit_dir / "day_anomaly_audit.csv", index=False)
+
+    print(f"Annual summary: {len(summary)} rows")
+    print(f"Annual coverage: {len(coverage)} rows")
+    print(f"Outputs saved to {output_dir}")
+    print(f"Day anomaly audit: {len(audit)} flagged rows")
+    print(f"Audit saved to {audit_dir}")
+
+# Entry point for the script.
+if __name__ == "__main__":
+    main()
