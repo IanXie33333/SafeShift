@@ -113,14 +113,15 @@ Passing basic validation does not guarantee that a value is plausible.
 
 Records are flagged for review when:
 
-- Reported days exceed 180 per corresponding injury case
-- Reported days are positive while the corresponding case count is zero
+- Reported days exceed 180 times total DART cases for the individual or combined measure
+- Reported days are positive while total DART cases are zero
+- An individual day value is missing, nonnumeric, negative, or fractional
 
 These conditions are screening flags, not automatic exclusion rules.
 
 ### Audit and Review Status
 
-The anomaly audit contains 4,351 flagged measure-level records.
+The anomaly audit is regenerated using the DART denominator and a separate combined-day screen. Its current row count is recorded in the generated source/run manifest.
 
 Each flagged record retains source-identification information and a `pending_review` disposition.
 
@@ -151,7 +152,7 @@ This dataset contains processed OSHA ITA warehouse establishment-year records fr
 
 ### Generated Outputs
 
-The analysis generates three CSV files:
+The analysis generates the following core CSV files:
 
 1. `data/processed/research_v2/annual_size_summary.csv`
    - Annual metrics by year, size group, and scenario
@@ -163,7 +164,7 @@ The analysis generates three CSV files:
 
 3. `artifacts/research_v2/annual/day_anomaly_audit.csv`
    - Record-level day-metric screening results
-   - 4,351 flagged rows
+   - DART-based individual/combined review flags and invalid individual values
 
 ### Reproduction Command
 
@@ -200,3 +201,32 @@ The following checks were completed:
 - Blocked day-total export tests
 
 The analysis is reproducible from the processed input dataset using the command above.
+
+## Review patch: complete release and refresh behavior
+
+The same command also regenerates `coverage_reconciliation.csv`,
+`scenario_comparison.csv`, `tableau_reference_totals.csv`, and
+`source_run_manifest.json` under the audit directory. Reference totals are
+computed directly from the scenario facts and reconciled with size summaries.
+The manifest records the actual source/code/output hashes, runtime versions,
+Git revision, dirty-worktree status, parameters, and passed quality checks.
+
+Existing output files are protected. Use new output directories for a new run,
+or explicitly add `--overwrite` after preserving the accepted outputs. The local
+patch runner backs up the prior WP1 outputs before using this option.
+
+The loader preserves identifiers as text and checks schema, Boolean flags,
+normalized key uniqueness, actual NAICS values, positive core exposure,
+nonnegative/integer case fields, DART components, and source coordinates.
+Invalid core rows already excluded by upstream flags remain excluded; contradictory
+true flags stop the run. Every source year appears in coverage for both scenarios,
+including zero-row scenarios. Empty-cohort rates remain missing, not zero.
+
+Independent post-run verification:
+
+```bash
+uv run --locked python scripts/verify_wp1_release.py
+```
+
+Only the local verification script's successful full test run establishes the
+current checkout's project-wide test result. Earlier test counts are historical.

@@ -1,12 +1,18 @@
-
 """Annual warehouse establishment patterns, 2016–2025."""
 
+import argparse
 from pathlib import Path
 
 import pandas as pd
 
-import argparse
-
+from src.analysis.annual_review_utils import (
+    day_audit,
+    destinations,
+    file_hash,
+    preflight,
+    read_validated_input,
+    write_release,
+)
 
 SIZE_LABELS = [
     "lt_50",
@@ -47,55 +53,14 @@ def flag_high_days_per_case(
 
 # Day anomaly audit function
 def create_day_anomaly_audit(primary: pd.DataFrame) -> pd.DataFrame:
-    """Create a record-level audit of suspicious reported day values."""
-    audits = []
-
-    for measure, days_col, cases_col in [
-        ("dafw", "total_dafw_days", "total_dafw_cases"),
-        ("djtr", "total_djtr_days", "total_djtr_cases"),
-    ]:
-        high_ratio = flag_high_days_per_case(
-            primary[days_col], primary[cases_col]
-        )
-        zero_cases = (
-            (primary[days_col] > 0)
-            & (primary[cases_col] == 0)
-        )
-
-        flagged = high_ratio | zero_cases
-
-        records = primary.loc[flagged, [
-            "year",
-            "establishment_id",
-            "establishment_name",
-            "source_file",
-            "source_record",
-            days_col,
-            cases_col,
-            "dart_count",
-        ]].copy()
-
-        records = records.rename(columns={
-            days_col: "reported_days",
-            cases_col: "reported_cases",
-        })
-
-        records["measure"] = measure
-        records["high_days_per_case"] = high_ratio.loc[flagged].to_numpy()
-        records["positive_days_zero_cases"] = (
-            zero_cases.loc[flagged].to_numpy()
-        )
-        records["disposition"] = "pending_review"
-
-        audits.append(records)
-
-    return pd.concat(audits, ignore_index=True)
+    """Audit DART-based day review signals without excluding case/rate records."""
+    return day_audit(primary)
 
 
 # Primary cohort loading function
 def load_primary_cohort(input_path: Path) -> pd.DataFrame:
     """Load structurally eligible warehouse-year records."""
-    df = pd.read_csv(input_path, low_memory=False)
+    df = read_validated_input(input_path)
 
     eligible = (
         df["is_naics_4931"]
@@ -225,6 +190,10 @@ def summarize_coverage(
     raw: pd.DataFrame,
 ) -> pd.DataFrame:
     """Count eligible warehouse-year records by year and scenario."""
+    grid = pd.MultiIndex.from_product(
+        [sorted(raw["year"].unique()), ["exposure_sensitivity", "primary"]],
+        names=["year", "scenario"],
+    )
     coverage = (
         scenarios.groupby(["year", "scenario"])
         .agg(
@@ -237,6 +206,7 @@ def summarize_coverage(
             restricted_days_missing=("total_djtr_days", lambda x: x.isna().sum()),
             djtr_days_available=("total_djtr_days", lambda x: valid_day_values(x).sum()),
         )
+        .reindex(grid, fill_value=0)
         .reset_index()
     )
 
@@ -283,6 +253,8 @@ def summarize_coverage(
         validate="many_to_one",
     )
 
+    coverage["primary_records"] = coverage["primary_records"].fillna(0).astype(int)
+
     # Add exclusion counts by reason
     coverage = coverage.merge(
         exclusion_counts,
@@ -311,6 +283,7 @@ def summarize_coverage(
         validate="many_to_one",
     )
 
+    coverage["sensitivity_records"] = coverage["sensitivity_records"].fillna(0).astype(int)
     coverage["exposure_excluded"] = (
         coverage["primary_records"]
         - coverage["sensitivity_records"]
@@ -340,32 +313,29 @@ def main() -> None:
         type=Path,
         default=Path("artifacts/research_v2/annual"),
     )
+    parser.add_argument("--overwrite", action="store_true", help="Replace this module's outputs explicitly")
     args = parser.parse_args()
 
     input_path = args.input
     output_dir = args.output_dir
 
-    output_dir.mkdir(parents=True, exist_ok=True)
     audit_dir = args.audit_dir
-    audit_dir.mkdir(parents=True, exist_ok=True)
-
-    raw = pd.read_csv(input_path, low_memory=False)
+    preflight(input_path, destinations(output_dir, audit_dir), args.overwrite)
+    source_sha = file_hash(input_path)
+    raw = read_validated_input(input_path)
     primary = load_primary_cohort(input_path)
     scenarios = create_scenarios(primary)
-
     summary = summarize_annual(scenarios)
     coverage = summarize_coverage(scenarios, raw)
     audit = create_day_anomaly_audit(primary)
-
-    summary.to_csv(output_dir / "annual_size_summary.csv", index=False)
-    coverage.to_csv(output_dir / "annual_coverage.csv", index=False)
-    audit.to_csv(audit_dir / "day_anomaly_audit.csv", index=False)
+    write_release(args, raw, scenarios, summary, coverage, audit, source_sha, Path(__file__))
 
     print(f"Annual summary: {len(summary)} rows")
     print(f"Annual coverage: {len(coverage)} rows")
     print(f"Outputs saved to {output_dir}")
     print(f"Day anomaly audit: {len(audit)} flagged rows")
     print(f"Audit saved to {audit_dir}")
+    print("Seven release files generated; reconciliation passed; day sums remain blocked.")
 
 # Entry point for the script.
 if __name__ == "__main__":

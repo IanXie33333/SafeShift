@@ -1,4 +1,3 @@
-
 # Annual Day-Measure Quality Policy
 
 ## Source-verified anomalies
@@ -41,35 +40,31 @@ the anomaly review and final disposition are documented.
 Current eligibility counts reflect basic numeric validity
 checks and are provisional pending anomaly review.
 
-## Automated anomaly screening
+## Automated anomaly screening after the review patch
 
-Screening was performed on the primary cohort of
-72,235 establishment-year records.
+All day-review thresholds use total DART cases as the explicit broad screening
+population. DAFW-classified cases may also contribute restricted days, so positive
+restricted days with zero restricted-only cases do not alone enter the anomaly
+queue. No review flag establishes an error or automatically removes a record.
 
-| Screening condition | DAFW | DJTR |
-|---|---:|---:|
-| More than 180 days per corresponding case | 159 | 677 |
-| Positive days with zero corresponding cases | 19 | 3,496 |
+The audit evaluates DAFW days, DJTR days, and their combined reported total. It
+flags values above 180 times DART cases, positive days with zero DART cases, and
+invalid/missing individual day values. The combined screen requires both day
+fields to pass basic numeric validation. OSHA permits capping day tracking;
+180 is a review threshold here, not a mandatory maximum or a clipping rule.
 
-The 180-day threshold is a review trigger, not an
-automatic exclusion threshold.
+`reported_cases` preserves the corresponding original case count; the new
+`review_case_count` is always `dart_count`, including for restricted days.
+`high_days_per_case` and `positive_days_zero_cases` refer to this explicit DART
+review denominator. `invalid_day_value` identifies basic invalidity/missingness.
+The combined measure is an arithmetic total, not a measure of paid hours lost.
 
-Positive days with zero corresponding cases are also
-flagged for investigation. In particular, DJTR days
-can occur alongside DAFW-classified cases, even when
-the reported DJTR case count is zero.
+The revised supplied-snapshot audit contains 446 measure-level entries, rather
+than the prior 4,351. The live output count and hashes are recorded in the generated
+source/run manifest; a row can appear for more than one measure. This change
+alters the review queue only. Counts, rates, numeric day-availability counts,
+and both `blocked_review` publication statuses remain unchanged.
 
-Notable records requiring review include:
-
-- South Texas - SCC (2024): 55,555,555 DAFW days
-- HSN Piney Flats (2018): 1,091,856 DJTR days
-- Men's Wearhouse - Addison DC (2019): 292,210 DJTR days
-- The Paper Store - 0097 - Warehouse (2025):
-  679 DAFW days with zero DART cases
-
-These screening results do not establish reporting
-errors. No records have been automatically excluded
-based solely on these flags.
-
-Both day measures remain blocked from publication
-pending final anomaly disposition.
+The three source-verified extreme values documented above retain pending
+review status. Their final disposition is still needed before day totals or
+burden findings can be displayed.
