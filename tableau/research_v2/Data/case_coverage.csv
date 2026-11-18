@@ -1,0 +1,5 @@
+year,scenario,input_rows_all_industries,warehouse_rows_naics_4931,excluded_date_missing_or_invalid,excluded_incident_year_mismatch,excluded_day_review_flag,included_report_count,missing_event_code_reports,other_reported_mechanism_reports,unknown_occupation_reports,dafw_days_known_reports,djtr_days_known_reports,outcome_unknown_reports,decode_replacement_reports_retained
+2023,primary,890934,58618,0,13,0,58605,1140,317,8900,58605,58605,0,11
+2023,day_review_sensitivity,890934,58618,0,13,465,58140,1134,315,8794,58140,58140,0,11
+2024,primary,688649,56578,0,9,0,56569,2327,326,12066,56569,56569,0,1
+2024,day_review_sensitivity,688649,56578,0,9,267,56302,2316,326,11983,56302,56302,0,1

@@ -1,0 +1,15 @@
+mechanism_label	scenario	Case reports	Days-away denominator (reports with valid value)	Days-away numerator	QA mean days away x 1e9 (integer)	QA mean restricted days x 1e9 (integer)	QA percent of reports x 1e9 (integer)	Restricted days denominator (reports with valid value)	Restricted days numerator
+Contact with objects/equipment	day_review_sensitivity	28,337	28,337	285,878	10,088,506,193	22,340,120,690	247,610,143	28,337	633,052
+Contact with objects/equipment	primary	28,452	28,452	299,268	10,518,346,689	22,701,391,818	247,034,921	28,452	645,900
+Falls, slips, trips	day_review_sensitivity	13,013	13,013	240,020	18,444,632,291	30,399,139,322	113,708,254	13,013	395,584
+Falls, slips, trips	primary	13,152	13,152	258,471	19,652,600,365	31,143,400,243	114,192,439	13,152	409,598
+Harmful exposure	day_review_sensitivity	1,789	1,789	9,078	5,074,343,208	7,520,402,459	15,632,373	1,789	13,454
+Harmful exposure	primary	1,791	1,791	9,134	5,099,944,165	7,713,009,492	15,550,385	1,791	13,814
+Other reported mechanism	day_review_sensitivity	641	641	6,013	9,380,655,226	11,787,831,513	5,601,091	641	7,556
+Other reported mechanism	primary	643	643	6,260	9,735,614,308	12,031,104,199	5,582,857	643	7,736
+Overexertion / bodily reaction	day_review_sensitivity	63,787	63,787	641,183	10,051,938,483	41,100,396,633	557,374,041	63,787	2,621,671
+Overexertion / bodily reaction	primary	64,184	64,184	684,226	10,660,382,650	41,601,442,727	557,278,552	64,184	2,670,147
+Transportation incidents	day_review_sensitivity	3,425	3,425	99,073	28,926,423,358	19,138,394,161	29,927,824	3,425	65,549
+Transportation incidents	primary	3,485	3,485	109,539	31,431,563,845	19,917,934,003	30,258,565	3,485	69,414
+Unknown / missing mechanism	day_review_sensitivity	3,450	3,450	45,346	13,143,768,116	29,733,913,043	30,146,275	3,450	102,582
+Unknown / missing mechanism	primary	3,467	3,467	47,531	13,709,547,159	30,107,874,243	30,102,280	3,467	104,384

@@ -1,0 +1,65 @@
+scenario	soc_major_label	year	Case reports	Days-away denominator (reports with valid value)	Days-away numerator	QA mean days away x 1e9 (integer)	QA mean restricted days x 1e9 (integer)	Restricted days denominator (reports with valid value)	Restricted days numerator
+day_review_sensitivity	Architecture and Engineering	2023	6	6	13	2,166,666,667	0	6	0
+day_review_sensitivity	Architecture and Engineering	2024	3	3	20	6,666,666,667	25,333,333,333	3	76
+day_review_sensitivity	Arts, Design, Entertainment, Sports, and Media	2023	2	2	0	0	60,000,000,000	2	120
+day_review_sensitivity	Building and Grounds Cleaning and Maintenance	2023	284	284	4,986	17,556,338,028	16,021,126,761	284	4,550
+day_review_sensitivity	Building and Grounds Cleaning and Maintenance	2024	244	244	5,543	22,717,213,115	19,561,475,410	244	4,773
+day_review_sensitivity	Business and Financial Operations	2023	376	376	8,283	22,029,255,319	17,880,319,149	376	6,723
+day_review_sensitivity	Business and Financial Operations	2024	582	582	19,327	33,207,903,780	12,364,261,168	582	7,196
+day_review_sensitivity	Computer and Mathematical	2023	14	14	36	2,571,428,571	29,928,571,429	14	419
+day_review_sensitivity	Computer and Mathematical	2024	19	19	271	14,263,157,895	21,631,578,947	19	411
+day_review_sensitivity	Construction and Extraction	2023	12	12	118	9,833,333,333	47,916,666,667	12	575
+day_review_sensitivity	Construction and Extraction	2024	6	6	76	12,666,666,667	61,833,333,333	6	371
+day_review_sensitivity	Educational Instruction and Library	2023	43	43	363	8,441,860,465	40,837,209,302	43	1,756
+day_review_sensitivity	Farming, Fishing, and Forestry	2023	9	9	46	5,111,111,111	46,222,222,222	9	416
+day_review_sensitivity	Food Preparation and Serving Related	2023	36	36	159	4,416,666,667	22,750,000,000	36	819
+day_review_sensitivity	Healthcare Practitioners and Technical	2023	6	6	134	22,333,333,333	35,833,333,333	6	215
+day_review_sensitivity	Healthcare Practitioners and Technical	2024	2	2	0	0	4,000,000,000	2	8
+day_review_sensitivity	Installation, Maintenance, and Repair	2023	310	310	4,739	15,287,096,774	17,183,870,968	310	5,327
+day_review_sensitivity	Installation, Maintenance, and Repair	2024	102	102	1,663	16,303,921,569	16,647,058,824	102	1,698
+day_review_sensitivity	Management	2023	787	787	6,950	8,831,003,812	30,925,031,766	787	24,338
+day_review_sensitivity	Management	2024	19	19	195	10,263,157,895	27,578,947,368	19	524
+day_review_sensitivity	Office and Administrative Support	2023	1,120	1,120	20,011	17,866,964,286	21,128,571,429	1,120	23,664
+day_review_sensitivity	Office and Administrative Support	2024	952	952	18,518	19,451,680,672	19,711,134,454	952	18,765
+day_review_sensitivity	Production	2023	293	293	4,597	15,689,419,795	18,853,242,321	293	5,524
+day_review_sensitivity	Production	2024	230	230	8,118	35,295,652,174	16,339,130,435	230	3,758
+day_review_sensitivity	Protective Service	2023	35	35	308	8,800,000,000	23,314,285,714	35	816
+day_review_sensitivity	Protective Service	2024	19	19	233	12,263,157,895	21,789,473,684	19	414
+day_review_sensitivity	Sales and Related	2023	74	74	1,220	16,486,486,486	20,716,216,216	74	1,533
+day_review_sensitivity	Sales and Related	2024	86	86	1,582	18,395,348,837	17,453,488,372	86	1,501
+day_review_sensitivity	Transportation and Material Moving	2023	45,939	45,939	493,681	10,746,446,375	36,196,543,242	45,939	1,662,833
+day_review_sensitivity	Transportation and Material Moving	2024	42,055	42,055	373,715	8,886,339,318	37,256,140,768	42,055	1,566,807
+day_review_sensitivity	Unknown occupation	2023	8,794	8,794	155,835	17,720,604,958	23,371,503,298	8,794	205,529
+day_review_sensitivity	Unknown occupation	2024	11,983	11,983	195,851	16,344,070,767	24,033,130,268	11,983	287,989
+primary	Architecture and Engineering	2023	6	6	13	2,166,666,667	0	6	0
+primary	Architecture and Engineering	2024	3	3	20	6,666,666,667	25,333,333,333	3	76
+primary	Arts, Design, Entertainment, Sports, and Media	2023	2	2	0	0	60,000,000,000	2	120
+primary	Building and Grounds Cleaning and Maintenance	2023	294	294	7,083	24,091,836,735	17,323,129,252	294	5,093
+primary	Building and Grounds Cleaning and Maintenance	2024	245	245	5,638	23,012,244,898	19,869,387,755	245	4,868
+primary	Business and Financial Operations	2023	378	378	8,667	22,928,571,429	18,306,878,307	378	6,920
+primary	Business and Financial Operations	2024	588	588	19,658	33,431,972,789	14,253,401,361	588	8,381
+primary	Computer and Mathematical	2023	14	14	36	2,571,428,571	29,928,571,429	14	419
+primary	Computer and Mathematical	2024	19	19	271	14,263,157,895	21,631,578,947	19	411
+primary	Construction and Extraction	2023	12	12	118	9,833,333,333	47,916,666,667	12	575
+primary	Construction and Extraction	2024	6	6	76	12,666,666,667	61,833,333,333	6	371
+primary	Educational Instruction and Library	2023	43	43	363	8,441,860,465	40,837,209,302	43	1,756
+primary	Farming, Fishing, and Forestry	2023	9	9	46	5,111,111,111	46,222,222,222	9	416
+primary	Food Preparation and Serving Related	2023	37	37	235	6,351,351,351	27,000,000,000	37	999
+primary	Healthcare Practitioners and Technical	2023	6	6	134	22,333,333,333	35,833,333,333	6	215
+primary	Healthcare Practitioners and Technical	2024	2	2	0	0	4,000,000,000	2	8
+primary	Installation, Maintenance, and Repair	2023	310	310	4,739	15,287,096,774	17,183,870,968	310	5,327
+primary	Installation, Maintenance, and Repair	2024	102	102	1,663	16,303,921,569	16,647,058,824	102	1,698
+primary	Management	2023	792	792	7,404	9,348,484,848	31,525,252,525	792	24,968
+primary	Management	2024	19	19	195	10,263,157,895	27,578,947,368	19	524
+primary	Office and Administrative Support	2023	1,131	1,131	21,470	18,983,200,707	22,106,984,969	1,131	25,003
+primary	Office and Administrative Support	2024	965	965	20,337	21,074,611,399	20,751,295,337	965	20,025
+primary	Production	2023	302	302	6,523	21,599,337,748	19,778,145,695	302	5,973
+primary	Production	2024	233	233	8,528	36,600,858,369	17,824,034,335	233	4,153
+primary	Protective Service	2023	36	36	556	15,444,444,444	22,666,666,667	36	816
+primary	Protective Service	2024	20	20	367	18,350,000,000	27,400,000,000	20	548
+primary	Sales and Related	2023	74	74	1,220	16,486,486,486	20,716,216,216	74	1,533
+primary	Sales and Related	2024	87	87	1,921	22,080,459,770	17,770,114,943	87	1,546
+primary	Transportation and Material Moving	2023	46,259	46,259	535,688	11,580,189,801	36,643,182,948	46,259	1,695,077
+primary	Transportation and Material Moving	2024	42,214	42,214	385,527	9,132,681,101	37,643,554,271	42,214	1,589,085
+primary	Unknown occupation	2023	8,900	8,900	170,232	19,127,191,011	24,279,213,483	8,900	216,085
+primary	Unknown occupation	2024	12,066	12,066	205,701	17,047,986,077	24,697,828,609	12,066	298,004

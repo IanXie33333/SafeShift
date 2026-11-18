@@ -1,0 +1,45 @@
+{
+  "work_package": "WP3 Tableau integration",
+  "run_date": "2026-11-17",
+  "tableau": "Tableau Desktop 2026.3 (Apple silicon)",
+  "git_revision_at_run": "f46e99b45332ec8ff0ba48994500a3a4ce2bd006",
+  "git_worktree_dirty": true,
+  "case_data_status": "PROVISIONAL (generated from the case-pattern module written for WP2 spec; not the WP2 owner's export)",
+  "input_sha256": {
+    "annual_size_summary.csv": "ff3604425b9e71b5ee63c9ac32c6491d53c23182b2210c5aea63e151603cb5ed",
+    "annual_coverage.csv": "104926575059dc2e7bc61965441de381c5e8a6721845dbe1410ebf3154c7265c",
+    "case_pattern_summary.csv": "ba36fc8af7e60493f6963aa631273c8beaf62adff070f6bb74ac50081036ee54",
+    "case_coverage.csv": "8636993a126aeec6aec23e746712075daf3adffe58b4d29f3929c0aaf55f19dc",
+    "annual tableau_reference_totals.csv": "918620d7a20e9b72510dc5297c32b82c5cdb575ff9148d9f1c4f94fe75380895",
+    "case tableau_reference_totals.csv": "679bbcce6bd85919cc6d4f8c38d860830be47f72650310f8ea62e3a844f179be"
+  },
+  "output_sha256": {
+    "SafeShift_research_v2.twbx": "1ad96a163788ea7632cad30a0fa8727c05378a9261a8cbf177ed539530782b8b",
+    "build_workbook.py": "292aaa088403620538d0a278dfe3ab4d907c7c6b3e9a803d1f347ff834688954",
+    "validate_contracts.py": "3a0093a42022ab59320aa38678ed0606587e7d8c2fd8638cd064dcf6db891289"
+  },
+  "data_sources": [
+    "annual_size_summary",
+    "annual_coverage",
+    "case_pattern_summary",
+    "case_coverage"
+  ],
+  "joins_or_blends": false,
+  "scenario_default": "primary",
+  "checks": {
+    "contract_checks": "25/25 pass",
+    "qa_results_rows": 1216,
+    "qa_results_fail": 0
+  },
+  "commands": [
+    "python tableau/research_v2/validate_contracts.py ...",
+    "python tableau/research_v2/build_workbook.py ... (starting .twb)",
+    "Tableau Desktop: open, QA, File > Save As > packaged workbook",
+    "python make_qa_results.py (run in artifacts/research_v2/tableau)"
+  ],
+  "not_done": [
+    "Tableau Public publishing",
+    "mechanism highlight action",
+    "custom palette"
+  ]
+}

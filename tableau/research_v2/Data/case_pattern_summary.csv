@@ -1,0 +1,359 @@
+year,mechanism_group,mechanism_label,mechanism_order,soc_major_group,soc_major_label,soc_major_order,scenario,case_report_count,outcome_death_count,outcome_dafw_count,outcome_djtr_count,outcome_other_count,outcome_unknown_count,dafw_days_sum,djtr_days_sum,dafw_days_known_report_count,djtr_days_known_report_count,dafw_days_invalid_or_missing_count,djtr_days_invalid_or_missing_count,dafw_days_status,djtr_days_status,day_review_flag_report_count
+2023,transportation,Transportation incidents,1,11,Management,11,primary,20,0,6,11,3,0,297,603,20,20,0,0,ready,ready,1
+2023,transportation,Transportation incidents,1,13,Business and Financial Operations,13,primary,23,0,14,6,3,0,973,562,23,23,0,0,ready,ready,1
+2023,transportation,Transportation incidents,1,33,Protective Service,33,primary,3,0,2,1,0,0,18,32,3,3,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,37,Building and Grounds Cleaning and Maintenance,37,primary,13,0,7,3,3,0,567,118,13,13,0,0,ready,ready,1
+2023,transportation,Transportation incidents,1,41,Sales and Related,41,primary,3,0,1,0,2,0,106,0,3,3,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,43,Office and Administrative Support,43,primary,63,0,44,11,8,0,2884,1002,63,63,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,49,"Installation, Maintenance, and Repair",49,primary,10,1,8,0,1,0,222,212,10,10,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,51,Production,51,primary,14,0,8,4,2,0,541,68,14,14,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,53,Transportation and Material Moving,53,primary,1480,2,826,477,175,0,47642,28147,1480,1480,0,0,ready,ready,32
+2023,transportation,Transportation incidents,1,unknown,Unknown occupation,99,primary,405,2,230,122,51,0,11405,9665,405,405,0,0,ready,ready,12
+2023,falls_slips_trips,"Falls, slips, trips",2,11,Management,11,primary,120,0,40,55,25,0,1296,3584,120,120,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,13,Business and Financial Operations,13,primary,74,0,34,36,4,0,1580,1444,74,74,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,25,Educational Instruction and Library,25,primary,11,0,2,8,1,0,144,738,11,11,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,29,Healthcare Practitioners and Technical,29,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,33,Protective Service,33,primary,15,0,6,8,1,0,420,503,15,15,0,0,ready,ready,1
+2023,falls_slips_trips,"Falls, slips, trips",2,35,Food Preparation and Serving Related,35,primary,15,0,5,9,1,0,110,317,15,15,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,37,Building and Grounds Cleaning and Maintenance,37,primary,57,0,25,20,12,0,1557,1231,57,57,0,0,ready,ready,1
+2023,falls_slips_trips,"Falls, slips, trips",2,41,Sales and Related,41,primary,13,0,5,2,6,0,164,284,13,13,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,43,Office and Administrative Support,43,primary,190,0,92,63,35,0,3926,3945,190,190,0,0,ready,ready,1
+2023,falls_slips_trips,"Falls, slips, trips",2,45,"Farming, Fishing, and Forestry",45,primary,1,0,0,1,0,0,0,147,1,1,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,47,Construction and Extraction,47,primary,1,0,0,1,0,0,0,180,1,1,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,49,"Installation, Maintenance, and Repair",49,primary,39,0,21,11,7,0,1439,699,39,39,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,51,Production,51,primary,65,0,28,23,14,0,1637,1098,65,65,0,0,ready,ready,2
+2023,falls_slips_trips,"Falls, slips, trips",2,53,Transportation and Material Moving,53,primary,5191,0,2049,2672,470,0,97939,169315,5191,5191,0,0,ready,ready,56
+2023,falls_slips_trips,"Falls, slips, trips",2,unknown,Unknown occupation,99,primary,1374,0,718,507,149,0,34817,37689,1374,1374,0,0,ready,ready,20
+2023,harmful_exposure,Harmful exposure,3,11,Management,11,primary,25,0,9,1,15,0,228,30,25,25,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,13,Business and Financial Operations,13,primary,9,0,5,1,3,0,103,53,9,9,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,15,Computer and Mathematical,15,primary,2,0,1,0,1,0,1,0,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,25,Educational Instruction and Library,25,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,29,Healthcare Practitioners and Technical,29,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,33,Protective Service,33,primary,2,0,1,0,1,0,112,0,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,35,Food Preparation and Serving Related,35,primary,3,0,0,1,2,0,0,6,3,3,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,37,Building and Grounds Cleaning and Maintenance,37,primary,16,0,6,1,9,0,104,3,16,16,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,41,Sales and Related,41,primary,2,0,0,1,1,0,0,77,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,43,Office and Administrative Support,43,primary,18,0,6,6,6,0,208,37,18,18,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,45,"Farming, Fishing, and Forestry",45,primary,2,0,0,0,2,0,0,0,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,47,Construction and Extraction,47,primary,1,0,0,1,0,0,0,1,1,1,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,49,"Installation, Maintenance, and Repair",49,primary,7,0,4,0,3,0,13,0,7,7,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,51,Production,51,primary,5,0,0,2,3,0,0,31,5,5,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,53,Transportation and Material Moving,53,primary,662,0,286,130,246,0,3008,6171,662,662,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,unknown,Unknown occupation,99,primary,241,0,112,24,105,0,1997,991,241,241,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,11,Management,11,primary,172,0,45,75,52,0,1388,3078,172,172,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,13,Business and Financial Operations,13,primary,85,0,39,22,24,0,983,842,85,85,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,15,Computer and Mathematical,15,primary,1,0,0,1,0,0,0,7,1,1,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,17,Architecture and Engineering,17,primary,4,0,1,0,3,0,12,0,4,4,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,25,Educational Instruction and Library,25,primary,3,0,2,0,1,0,11,0,3,3,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,29,Healthcare Practitioners and Technical,29,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,33,Protective Service,33,primary,6,0,3,1,2,0,6,6,6,6,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,35,Food Preparation and Serving Related,35,primary,7,0,4,0,3,0,84,236,7,7,0,0,ready,ready,1
+2023,object_equipment_contact,Contact with objects/equipment,4,37,Building and Grounds Cleaning and Maintenance,37,primary,111,0,45,26,40,0,1633,1633,111,111,0,0,ready,ready,1
+2023,object_equipment_contact,Contact with objects/equipment,4,41,Sales and Related,41,primary,22,0,9,9,4,0,326,337,22,22,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,43,Office and Administrative Support,43,primary,333,0,120,121,92,0,4229,4383,333,333,0,0,ready,ready,1
+2023,object_equipment_contact,Contact with objects/equipment,4,45,"Farming, Fishing, and Forestry",45,primary,4,0,2,1,1,0,32,20,4,4,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,47,Construction and Extraction,47,primary,2,0,1,0,1,0,1,11,2,2,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,49,"Installation, Maintenance, and Repair",49,primary,149,0,38,49,62,0,1619,2007,149,149,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,51,Production,51,primary,88,0,23,27,38,0,1319,943,88,88,0,0,ready,ready,1
+2023,object_equipment_contact,Contact with objects/equipment,4,53,Transportation and Material Moving,53,primary,10953,2,3420,5559,1972,0,110507,274595,10953,10953,0,0,ready,ready,48
+2023,object_equipment_contact,Contact with objects/equipment,4,unknown,Unknown occupation,99,primary,2564,0,1083,865,616,0,36994,38330,2564,2564,0,0,ready,ready,19
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,11,Management,11,primary,421,0,95,253,73,0,4151,16353,421,421,0,0,ready,ready,4
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,13,Business and Financial Operations,13,primary,179,0,94,75,10,0,4994,3925,179,179,0,0,ready,ready,1
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,15,Computer and Mathematical,15,primary,11,0,3,6,2,0,35,412,11,11,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,17,Architecture and Engineering,17,primary,1,0,1,0,0,0,1,0,1,1,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,25,Educational Instruction and Library,25,primary,25,0,4,18,3,0,187,988,25,25,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,27,"Arts, Design, Entertainment, Sports, and Media",27,primary,2,0,0,2,0,0,0,120,2,2,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,29,Healthcare Practitioners and Technical,29,primary,3,0,1,2,0,0,134,215,3,3,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,33,Protective Service,33,primary,7,0,0,7,0,0,0,252,7,7,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,35,Food Preparation and Serving Related,35,primary,12,0,2,10,0,0,41,440,12,12,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,37,Building and Grounds Cleaning and Maintenance,37,primary,86,0,42,24,20,0,2980,1772,86,86,0,0,ready,ready,6
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,41,Sales and Related,41,primary,33,0,10,19,4,0,624,748,33,33,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,43,Office and Administrative Support,43,primary,500,0,201,244,55,0,9980,15082,500,500,0,0,ready,ready,9
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,45,"Farming, Fishing, and Forestry",45,primary,2,0,1,1,0,0,14,249,2,2,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,47,Construction and Extraction,47,primary,7,0,1,5,1,0,117,383,7,7,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,49,"Installation, Maintenance, and Repair",49,primary,91,0,31,46,14,0,1221,2136,91,91,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,51,Production,51,primary,125,0,52,60,13,0,2894,3823,125,125,0,0,ready,ready,6
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,53,Transportation and Material Moving,53,primary,26853,0,6598,18866,1389,0,264869,1182798,26853,26853,0,0,ready,ready,179
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,unknown,Unknown occupation,99,primary,4087,0,1747,1946,394,0,81572,126004,4087,4087,0,0,ready,ready,53
+2023,other_reported_mechanism,Other reported mechanism,6,11,Management,11,primary,11,0,3,3,5,0,9,291,11,11,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,13,Business and Financial Operations,13,primary,4,0,1,1,2,0,24,44,4,4,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,17,Architecture and Engineering,17,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,33,Protective Service,33,primary,2,0,0,2,0,0,0,23,2,2,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,37,Building and Grounds Cleaning and Maintenance,37,primary,1,0,1,0,0,0,33,0,1,1,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,43,Office and Administrative Support,43,primary,7,0,1,2,4,0,4,166,7,7,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,49,"Installation, Maintenance, and Repair",49,primary,2,0,0,0,2,0,0,0,2,2,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,51,Production,51,primary,1,0,1,0,0,0,26,0,1,1,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,53,Transportation and Material Moving,53,primary,218,0,57,73,88,0,1814,2950,218,218,0,0,ready,ready,1
+2023,other_reported_mechanism,Other reported mechanism,6,unknown,Unknown occupation,99,primary,70,0,17,18,35,0,789,639,70,70,0,0,ready,ready,1
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,11,Management,11,primary,23,0,3,15,5,0,35,1029,23,23,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,13,Business and Financial Operations,13,primary,4,0,1,3,0,0,10,50,4,4,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,25,Educational Instruction and Library,25,primary,3,0,1,0,2,0,21,30,3,3,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,33,Protective Service,33,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,37,Building and Grounds Cleaning and Maintenance,37,primary,10,0,3,2,5,0,209,336,10,10,0,0,ready,ready,1
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,41,Sales and Related,41,primary,1,0,0,1,0,0,0,87,1,1,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,43,Office and Administrative Support,43,primary,20,0,9,5,6,0,239,388,20,20,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,47,Construction and Extraction,47,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,49,"Installation, Maintenance, and Repair",49,primary,12,0,5,6,1,0,225,273,12,12,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,51,Production,51,primary,4,0,2,1,1,0,106,10,4,4,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,53,Transportation and Material Moving,53,primary,902,2,269,508,123,0,9909,31101,902,902,0,0,ready,ready,4
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,unknown,Unknown occupation,99,primary,159,0,62,55,42,0,2658,2767,159,159,0,0,ready,ready,1
+2023,transportation,Transportation incidents,1,11,Management,11,day_review_sensitivity,19,0,5,11,3,0,296,423,19,19,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,13,Business and Financial Operations,13,day_review_sensitivity,22,0,13,6,3,0,589,562,22,22,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,33,Protective Service,33,day_review_sensitivity,3,0,2,1,0,0,18,32,3,3,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,12,0,6,3,3,0,165,118,12,12,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,41,Sales and Related,41,day_review_sensitivity,3,0,1,0,2,0,106,0,3,3,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,43,Office and Administrative Support,43,day_review_sensitivity,63,0,44,11,8,0,2884,1002,63,63,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,10,1,8,0,1,0,222,212,10,10,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,51,Production,51,day_review_sensitivity,14,0,8,4,2,0,541,68,14,14,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,53,Transportation and Material Moving,53,day_review_sensitivity,1448,2,794,477,175,0,41393,26489,1448,1448,0,0,ready,ready,0
+2023,transportation,Transportation incidents,1,unknown,Unknown occupation,99,day_review_sensitivity,393,2,218,122,51,0,9206,9084,393,393,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,11,Management,11,day_review_sensitivity,120,0,40,55,25,0,1296,3584,120,120,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,13,Business and Financial Operations,13,day_review_sensitivity,74,0,34,36,4,0,1580,1444,74,74,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,25,Educational Instruction and Library,25,day_review_sensitivity,11,0,2,8,1,0,144,738,11,11,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,29,Healthcare Practitioners and Technical,29,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,33,Protective Service,33,day_review_sensitivity,14,0,5,8,1,0,172,503,14,14,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,35,Food Preparation and Serving Related,35,day_review_sensitivity,15,0,5,9,1,0,110,317,15,15,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,56,0,24,20,12,0,1381,1217,56,56,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,41,Sales and Related,41,day_review_sensitivity,13,0,5,2,6,0,164,284,13,13,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,43,Office and Administrative Support,43,day_review_sensitivity,189,0,91,63,35,0,3754,3903,189,189,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,45,"Farming, Fishing, and Forestry",45,day_review_sensitivity,1,0,0,1,0,0,0,147,1,1,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,47,Construction and Extraction,47,day_review_sensitivity,1,0,0,1,0,0,0,180,1,1,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,39,0,21,11,7,0,1439,699,39,39,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,51,Production,51,day_review_sensitivity,63,0,26,23,14,0,1279,869,63,63,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,53,Transportation and Material Moving,53,day_review_sensitivity,5135,0,1996,2669,470,0,89504,164492,5135,5135,0,0,ready,ready,0
+2023,falls_slips_trips,"Falls, slips, trips",2,unknown,Unknown occupation,99,day_review_sensitivity,1354,0,700,505,149,0,32414,35690,1354,1354,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,11,Management,11,day_review_sensitivity,25,0,9,1,15,0,228,30,25,25,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,13,Business and Financial Operations,13,day_review_sensitivity,9,0,5,1,3,0,103,53,9,9,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,15,Computer and Mathematical,15,day_review_sensitivity,2,0,1,0,1,0,1,0,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,25,Educational Instruction and Library,25,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,29,Healthcare Practitioners and Technical,29,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,33,Protective Service,33,day_review_sensitivity,2,0,1,0,1,0,112,0,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,35,Food Preparation and Serving Related,35,day_review_sensitivity,3,0,0,1,2,0,0,6,3,3,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,16,0,6,1,9,0,104,3,16,16,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,41,Sales and Related,41,day_review_sensitivity,2,0,0,1,1,0,0,77,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,43,Office and Administrative Support,43,day_review_sensitivity,18,0,6,6,6,0,208,37,18,18,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,45,"Farming, Fishing, and Forestry",45,day_review_sensitivity,2,0,0,0,2,0,0,0,2,2,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,47,Construction and Extraction,47,day_review_sensitivity,1,0,0,1,0,0,0,1,1,1,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,7,0,4,0,3,0,13,0,7,7,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,51,Production,51,day_review_sensitivity,5,0,0,2,3,0,0,31,5,5,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,53,Transportation and Material Moving,53,day_review_sensitivity,662,0,286,130,246,0,3008,6171,662,662,0,0,ready,ready,0
+2023,harmful_exposure,Harmful exposure,3,unknown,Unknown occupation,99,day_review_sensitivity,241,0,112,24,105,0,1997,991,241,241,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,11,Management,11,day_review_sensitivity,172,0,45,75,52,0,1388,3078,172,172,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,13,Business and Financial Operations,13,day_review_sensitivity,85,0,39,22,24,0,983,842,85,85,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,15,Computer and Mathematical,15,day_review_sensitivity,1,0,0,1,0,0,0,7,1,1,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,17,Architecture and Engineering,17,day_review_sensitivity,4,0,1,0,3,0,12,0,4,4,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,25,Educational Instruction and Library,25,day_review_sensitivity,3,0,2,0,1,0,11,0,3,3,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,29,Healthcare Practitioners and Technical,29,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,33,Protective Service,33,day_review_sensitivity,6,0,3,1,2,0,6,6,6,6,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,35,Food Preparation and Serving Related,35,day_review_sensitivity,6,0,3,0,3,0,8,56,6,6,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,110,0,44,26,40,0,1445,1633,110,110,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,41,Sales and Related,41,day_review_sensitivity,22,0,9,9,4,0,326,337,22,22,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,43,Office and Administrative Support,43,day_review_sensitivity,332,0,119,121,92,0,3993,4299,332,332,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,45,"Farming, Fishing, and Forestry",45,day_review_sensitivity,4,0,2,1,1,0,32,20,4,4,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,47,Construction and Extraction,47,day_review_sensitivity,2,0,1,0,1,0,1,11,2,2,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,149,0,38,49,62,0,1619,2007,149,149,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,51,Production,51,day_review_sensitivity,87,0,22,27,38,0,1044,943,87,87,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,53,Transportation and Material Moving,53,day_review_sensitivity,10905,2,3375,5556,1972,0,105316,269339,10905,10905,0,0,ready,ready,0
+2023,object_equipment_contact,Contact with objects/equipment,4,unknown,Unknown occupation,99,day_review_sensitivity,2545,0,1064,865,616,0,34003,36683,2545,2545,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,11,Management,11,day_review_sensitivity,417,0,92,252,73,0,3698,15903,417,417,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,13,Business and Financial Operations,13,day_review_sensitivity,178,0,94,74,10,0,4994,3728,178,178,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,15,Computer and Mathematical,15,day_review_sensitivity,11,0,3,6,2,0,35,412,11,11,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,17,Architecture and Engineering,17,day_review_sensitivity,1,0,1,0,0,0,1,0,1,1,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,25,Educational Instruction and Library,25,day_review_sensitivity,25,0,4,18,3,0,187,988,25,25,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,27,"Arts, Design, Entertainment, Sports, and Media",27,day_review_sensitivity,2,0,0,2,0,0,0,120,2,2,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,29,Healthcare Practitioners and Technical,29,day_review_sensitivity,3,0,1,2,0,0,134,215,3,3,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,33,Protective Service,33,day_review_sensitivity,7,0,0,7,0,0,0,252,7,7,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,35,Food Preparation and Serving Related,35,day_review_sensitivity,12,0,2,10,0,0,41,440,12,12,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,80,0,36,24,20,0,1649,1516,80,80,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,41,Sales and Related,41,day_review_sensitivity,33,0,10,19,4,0,624,748,33,33,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,43,Office and Administrative Support,43,day_review_sensitivity,491,0,192,244,55,0,8929,13869,491,491,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,45,"Farming, Fishing, and Forestry",45,day_review_sensitivity,2,0,1,1,0,0,14,249,2,2,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,47,Construction and Extraction,47,day_review_sensitivity,7,0,1,5,1,0,117,383,7,7,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,91,0,31,46,14,0,1221,2136,91,91,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,51,Production,51,day_review_sensitivity,119,0,46,60,13,0,1601,3603,119,119,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,53,Transportation and Material Moving,53,day_review_sensitivity,26674,0,6432,18853,1389,0,243504,1162674,26674,26674,0,0,ready,ready,0
+2023,overexertion_bodily_reaction,Overexertion / bodily reaction,5,unknown,Unknown occupation,99,day_review_sensitivity,4034,0,1702,1938,394,0,75111,119761,4034,4034,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,11,Management,11,day_review_sensitivity,11,0,3,3,5,0,9,291,11,11,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,13,Business and Financial Operations,13,day_review_sensitivity,4,0,1,1,2,0,24,44,4,4,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,17,Architecture and Engineering,17,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,33,Protective Service,33,day_review_sensitivity,2,0,0,2,0,0,0,23,2,2,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,1,0,1,0,0,0,33,0,1,1,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,43,Office and Administrative Support,43,day_review_sensitivity,7,0,1,2,4,0,4,166,7,7,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,2,0,0,0,2,0,0,0,2,2,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,51,Production,51,day_review_sensitivity,1,0,1,0,0,0,26,0,1,1,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,53,Transportation and Material Moving,53,day_review_sensitivity,217,0,56,73,88,0,1752,2770,217,217,0,0,ready,ready,0
+2023,other_reported_mechanism,Other reported mechanism,6,unknown,Unknown occupation,99,day_review_sensitivity,69,0,16,18,35,0,604,639,69,69,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,11,Management,11,day_review_sensitivity,23,0,3,15,5,0,35,1029,23,23,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,13,Business and Financial Operations,13,day_review_sensitivity,4,0,1,3,0,0,10,50,4,4,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,25,Educational Instruction and Library,25,day_review_sensitivity,3,0,1,0,2,0,21,30,3,3,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,33,Protective Service,33,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,9,0,3,1,5,0,209,63,9,9,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,41,Sales and Related,41,day_review_sensitivity,1,0,0,1,0,0,0,87,1,1,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,43,Office and Administrative Support,43,day_review_sensitivity,20,0,9,5,6,0,239,388,20,20,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,47,Construction and Extraction,47,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,12,0,5,6,1,0,225,273,12,12,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,51,Production,51,day_review_sensitivity,4,0,2,1,1,0,106,10,4,4,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,53,Transportation and Material Moving,53,day_review_sensitivity,898,2,265,508,123,0,9204,30898,898,898,0,0,ready,ready,0
+2023,unknown_missing_mechanism,Unknown / missing mechanism,7,unknown,Unknown occupation,99,day_review_sensitivity,158,0,61,55,42,0,2500,2681,158,158,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,11,Management,11,primary,3,0,1,0,2,0,180,0,3,3,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,13,Business and Financial Operations,13,primary,38,1,28,5,4,0,1386,469,38,38,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,15,Computer and Mathematical,15,primary,1,0,1,0,0,0,180,0,1,1,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,17,Architecture and Engineering,17,primary,1,0,1,0,0,0,20,0,1,1,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,33,Protective Service,33,primary,2,0,0,1,1,0,134,135,2,2,0,0,ready,ready,1
+2024,transportation,Transportation incidents,1,37,Building and Grounds Cleaning and Maintenance,37,primary,13,0,6,3,4,0,589,255,13,13,0,0,ready,ready,1
+2024,transportation,Transportation incidents,1,41,Sales and Related,41,primary,6,0,5,1,0,0,409,50,6,6,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,43,Office and Administrative Support,43,primary,45,0,24,10,11,0,1106,494,45,45,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,47,Construction and Extraction,47,primary,1,0,0,1,0,0,0,130,1,1,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,49,"Installation, Maintenance, and Repair",49,primary,2,0,2,0,0,0,294,29,2,2,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,51,Production,51,primary,10,0,5,2,3,0,186,150,10,10,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,53,Transportation and Material Moving,53,primary,889,0,536,232,121,0,26465,17811,889,889,0,0,ready,ready,8
+2024,transportation,Transportation incidents,1,unknown,Unknown occupation,99,primary,440,1,248,121,70,0,13935,9482,440,440,0,0,ready,ready,3
+2024,falls_slips_trips,"Falls, slips, trips",2,11,Management,11,primary,5,0,1,2,2,0,1,16,5,5,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,13,Business and Financial Operations,13,primary,122,0,79,26,17,0,3906,1724,122,122,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,15,Computer and Mathematical,15,primary,3,0,1,1,1,0,3,138,3,3,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,33,Protective Service,33,primary,5,0,1,1,3,0,29,45,5,5,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,37,Building and Grounds Cleaning and Maintenance,37,primary,35,0,18,11,6,0,1787,722,35,35,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,41,Sales and Related,41,primary,11,0,3,5,3,0,49,177,11,11,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,43,Office and Administrative Support,43,primary,141,0,75,40,26,0,3115,3207,141,141,0,0,ready,ready,3
+2024,falls_slips_trips,"Falls, slips, trips",2,49,"Installation, Maintenance, and Repair",49,primary,8,0,3,3,2,0,182,141,8,8,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,51,Production,51,primary,38,0,23,12,3,0,1762,956,38,38,0,0,ready,ready,2
+2024,falls_slips_trips,"Falls, slips, trips",2,53,Transportation and Material Moving,53,primary,3924,1,1462,2141,320,0,64344,135863,3924,3924,0,0,ready,ready,37
+2024,falls_slips_trips,"Falls, slips, trips",2,unknown,Unknown occupation,99,primary,1693,0,814,604,275,0,38264,45435,1693,1693,0,0,ready,ready,16
+2024,harmful_exposure,Harmful exposure,3,11,Management,11,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,13,Business and Financial Operations,13,primary,15,0,8,2,5,0,361,183,15,15,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,15,Computer and Mathematical,15,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,33,Protective Service,33,primary,1,0,1,0,0,0,1,0,1,1,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,37,Building and Grounds Cleaning and Maintenance,37,primary,12,0,5,0,7,0,44,3,12,12,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,43,Office and Administrative Support,43,primary,23,0,6,0,17,0,193,0,23,23,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,49,"Installation, Maintenance, and Repair",49,primary,4,0,2,0,2,0,25,0,4,4,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,51,Production,51,primary,4,0,0,0,4,0,0,0,4,4,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,53,Transportation and Material Moving,53,primary,515,0,177,134,204,0,2255,4808,515,515,0,0,ready,ready,2
+2024,harmful_exposure,Harmful exposure,3,unknown,Unknown occupation,99,primary,218,0,63,27,128,0,481,1420,218,218,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,11,Management,11,primary,6,0,3,1,2,0,7,33,6,6,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,13,Business and Financial Operations,13,primary,115,0,61,30,24,0,2853,978,115,115,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,15,Computer and Mathematical,15,primary,6,0,0,2,4,0,0,12,6,6,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,29,Healthcare Practitioners and Technical,29,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,33,Protective Service,33,primary,3,0,1,1,1,0,91,37,3,3,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,37,Building and Grounds Cleaning and Maintenance,37,primary,96,0,46,17,33,0,1109,2130,96,96,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,41,Sales and Related,41,primary,32,0,10,9,13,0,434,447,32,32,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,43,Office and Administrative Support,43,primary,285,0,131,63,91,0,4454,3360,285,285,0,0,ready,ready,1
+2024,object_equipment_contact,Contact with objects/equipment,4,47,Construction and Extraction,47,primary,2,0,1,0,1,0,76,0,2,2,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,49,"Installation, Maintenance, and Repair",49,primary,56,0,19,14,23,0,600,625,56,56,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,51,Production,51,primary,68,0,26,18,24,0,738,1306,68,68,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,53,Transportation and Material Moving,53,primary,9760,0,3111,5139,1510,0,85559,256405,9760,9760,0,0,ready,ready,27
+2024,object_equipment_contact,Contact with objects/equipment,4,unknown,Unknown occupation,99,primary,3517,0,1475,1074,968,0,44203,54139,3517,3517,0,0,ready,ready,16
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,11,Management,11,primary,3,0,1,2,0,0,7,475,3,3,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,13,Business and Financial Operations,13,primary,225,0,139,66,20,0,8347,4393,225,225,0,0,ready,ready,6
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,15,Computer and Mathematical,15,primary,6,0,1,4,1,0,13,261,6,6,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,17,Architecture and Engineering,17,primary,2,0,0,2,0,0,0,76,2,2,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,33,Protective Service,33,primary,5,0,2,2,1,0,16,183,5,5,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,37,Building and Grounds Cleaning and Maintenance,37,primary,74,0,31,31,12,0,1314,1682,74,74,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,41,Sales and Related,41,primary,32,0,14,15,3,0,944,656,32,32,0,0,ready,ready,1
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,43,Office and Administrative Support,43,primary,413,0,193,169,51,0,9903,12134,413,413,0,0,ready,ready,9
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,47,Construction and Extraction,47,primary,2,0,0,2,0,0,0,198,2,2,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,49,"Installation, Maintenance, and Repair",49,primary,23,0,8,9,6,0,562,814,23,23,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,51,Production,51,primary,104,0,70,22,12,0,5716,1565,104,104,0,0,ready,ready,1
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,53,Transportation and Material Moving,53,primary,25356,0,5640,18537,1179,0,188109,1119069,25356,25356,0,0,ready,ready,77
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,unknown,Unknown occupation,99,primary,5494,0,2343,2530,621,0,95481,172941,5494,5494,0,0,ready,ready,45
+2024,other_reported_mechanism,Other reported mechanism,6,11,Management,11,primary,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,13,Business and Financial Operations,13,primary,13,0,3,3,7,0,32,62,13,13,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,15,Computer and Mathematical,15,primary,2,0,1,0,1,0,75,0,2,2,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,33,Protective Service,33,primary,2,0,1,1,0,0,56,126,2,2,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,37,Building and Grounds Cleaning and Maintenance,37,primary,3,0,2,0,1,0,4,0,3,3,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,43,Office and Administrative Support,43,primary,11,0,6,1,4,0,569,84,11,11,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,49,"Installation, Maintenance, and Repair",49,primary,4,0,0,1,3,0,0,5,4,4,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,51,Production,51,primary,4,0,1,0,3,0,30,0,4,4,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,53,Transportation and Material Moving,53,primary,177,1,48,50,78,0,1195,2779,177,177,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,unknown,Unknown occupation,99,primary,109,1,42,10,56,0,1600,567,109,109,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,13,Business and Financial Operations,13,primary,60,0,46,10,4,0,2773,572,60,60,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,29,Healthcare Practitioners and Technical,29,primary,1,0,0,1,0,0,0,8,1,1,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,33,Protective Service,33,primary,2,0,1,1,0,0,40,22,2,2,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,37,Building and Grounds Cleaning and Maintenance,37,primary,12,0,10,1,1,0,791,76,12,12,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,41,Sales and Related,41,primary,6,0,4,2,0,0,85,216,6,6,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,43,Office and Administrative Support,43,primary,47,0,21,15,11,0,997,746,47,47,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,47,Construction and Extraction,47,primary,1,0,0,1,0,0,0,43,1,1,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,49,"Installation, Maintenance, and Repair",49,primary,5,0,0,4,1,0,0,84,5,5,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,51,Production,51,primary,5,0,3,1,1,0,96,176,5,5,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,53,Transportation and Material Moving,53,primary,1593,0,558,881,154,0,17600,52350,1593,1593,0,0,ready,ready,8
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,unknown,Unknown occupation,99,primary,595,0,273,230,92,0,11737,14020,595,595,0,0,ready,ready,3
+2024,transportation,Transportation incidents,1,11,Management,11,day_review_sensitivity,3,0,1,0,2,0,180,0,3,3,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,13,Business and Financial Operations,13,day_review_sensitivity,38,1,28,5,4,0,1386,469,38,38,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,15,Computer and Mathematical,15,day_review_sensitivity,1,0,1,0,0,0,180,0,1,1,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,17,Architecture and Engineering,17,day_review_sensitivity,1,0,1,0,0,0,20,0,1,1,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,33,Protective Service,33,day_review_sensitivity,1,0,0,1,0,0,0,1,1,1,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,12,0,5,3,4,0,494,160,12,12,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,41,Sales and Related,41,day_review_sensitivity,6,0,5,1,0,0,409,50,6,6,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,43,Office and Administrative Support,43,day_review_sensitivity,45,0,24,10,11,0,1106,494,45,45,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,47,Construction and Extraction,47,day_review_sensitivity,1,0,0,1,0,0,0,130,1,1,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,2,0,2,0,0,0,294,29,2,2,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,51,Production,51,day_review_sensitivity,10,0,5,2,3,0,186,150,10,10,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,53,Transportation and Material Moving,53,day_review_sensitivity,881,0,528,232,121,0,25477,17217,881,881,0,0,ready,ready,0
+2024,transportation,Transportation incidents,1,unknown,Unknown occupation,99,day_review_sensitivity,437,1,246,120,70,0,13921,8859,437,437,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,11,Management,11,day_review_sensitivity,5,0,1,2,2,0,1,16,5,5,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,13,Business and Financial Operations,13,day_review_sensitivity,122,0,79,26,17,0,3906,1724,122,122,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,15,Computer and Mathematical,15,day_review_sensitivity,3,0,1,1,1,0,3,138,3,3,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,33,Protective Service,33,day_review_sensitivity,5,0,1,1,3,0,29,45,5,5,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,35,0,18,11,6,0,1787,722,35,35,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,41,Sales and Related,41,day_review_sensitivity,11,0,3,5,3,0,49,177,11,11,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,43,Office and Administrative Support,43,day_review_sensitivity,138,0,73,39,26,0,2752,2836,138,138,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,8,0,3,3,2,0,182,141,8,8,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,51,Production,51,day_review_sensitivity,36,0,21,12,3,0,1430,730,36,36,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,53,Transportation and Material Moving,53,day_review_sensitivity,3887,1,1428,2138,320,0,60078,131451,3887,3887,0,0,ready,ready,0
+2024,falls_slips_trips,"Falls, slips, trips",2,unknown,Unknown occupation,99,day_review_sensitivity,1677,0,803,600,274,0,36566,43537,1677,1677,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,11,Management,11,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,13,Business and Financial Operations,13,day_review_sensitivity,15,0,8,2,5,0,361,183,15,15,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,15,Computer and Mathematical,15,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,33,Protective Service,33,day_review_sensitivity,1,0,1,0,0,0,1,0,1,1,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,12,0,5,0,7,0,44,3,12,12,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,43,Office and Administrative Support,43,day_review_sensitivity,23,0,6,0,17,0,193,0,23,23,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,4,0,2,0,2,0,25,0,4,4,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,51,Production,51,day_review_sensitivity,4,0,0,0,4,0,0,0,4,4,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,53,Transportation and Material Moving,53,day_review_sensitivity,513,0,175,134,204,0,2199,4448,513,513,0,0,ready,ready,0
+2024,harmful_exposure,Harmful exposure,3,unknown,Unknown occupation,99,day_review_sensitivity,218,0,63,27,128,0,481,1420,218,218,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,11,Management,11,day_review_sensitivity,6,0,3,1,2,0,7,33,6,6,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,13,Business and Financial Operations,13,day_review_sensitivity,115,0,61,30,24,0,2853,978,115,115,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,15,Computer and Mathematical,15,day_review_sensitivity,6,0,0,2,4,0,0,12,6,6,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,29,Healthcare Practitioners and Technical,29,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,33,Protective Service,33,day_review_sensitivity,3,0,1,1,1,0,91,37,3,3,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,96,0,46,17,33,0,1109,2130,96,96,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,41,Sales and Related,41,day_review_sensitivity,32,0,10,9,13,0,434,447,32,32,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,43,Office and Administrative Support,43,day_review_sensitivity,284,0,131,62,91,0,4454,3160,284,284,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,47,Construction and Extraction,47,day_review_sensitivity,2,0,1,0,1,0,76,0,2,2,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,56,0,19,14,23,0,600,625,56,56,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,51,Production,51,day_review_sensitivity,68,0,26,18,24,0,738,1306,68,68,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,53,Transportation and Material Moving,53,day_review_sensitivity,9733,0,3088,5135,1510,0,83516,252727,9733,9733,0,0,ready,ready,0
+2024,object_equipment_contact,Contact with objects/equipment,4,unknown,Unknown occupation,99,day_review_sensitivity,3501,0,1466,1072,963,0,41813,52336,3501,3501,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,11,Management,11,day_review_sensitivity,3,0,1,2,0,0,7,475,3,3,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,13,Business and Financial Operations,13,day_review_sensitivity,219,0,136,63,20,0,8016,3208,219,219,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,15,Computer and Mathematical,15,day_review_sensitivity,6,0,1,4,1,0,13,261,6,6,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,17,Architecture and Engineering,17,day_review_sensitivity,2,0,0,2,0,0,0,76,2,2,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,33,Protective Service,33,day_review_sensitivity,5,0,2,2,1,0,16,183,5,5,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,74,0,31,31,12,0,1314,1682,74,74,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,41,Sales and Related,41,day_review_sensitivity,31,0,13,15,3,0,605,611,31,31,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,43,Office and Administrative Support,43,day_review_sensitivity,404,0,185,168,51,0,8447,11445,404,404,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,47,Construction and Extraction,47,day_review_sensitivity,2,0,0,2,0,0,0,198,2,2,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,23,0,8,9,6,0,562,814,23,23,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,51,Production,51,day_review_sensitivity,103,0,69,22,12,0,5638,1396,103,103,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,53,Transportation and Material Moving,53,day_review_sensitivity,25279,0,5572,18528,1179,0,184439,1106910,25279,25279,0,0,ready,ready,0
+2024,overexertion_bodily_reaction,Overexertion / bodily reaction,5,unknown,Unknown occupation,99,day_review_sensitivity,5449,0,2313,2524,612,0,90266,167415,5449,5449,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,11,Management,11,day_review_sensitivity,1,0,0,0,1,0,0,0,1,1,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,13,Business and Financial Operations,13,day_review_sensitivity,13,0,3,3,7,0,32,62,13,13,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,15,Computer and Mathematical,15,day_review_sensitivity,2,0,1,0,1,0,75,0,2,2,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,33,Protective Service,33,day_review_sensitivity,2,0,1,1,0,0,56,126,2,2,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,3,0,2,0,1,0,4,0,3,3,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,43,Office and Administrative Support,43,day_review_sensitivity,11,0,6,1,4,0,569,84,11,11,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,4,0,0,1,3,0,0,5,4,4,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,51,Production,51,day_review_sensitivity,4,0,1,0,3,0,30,0,4,4,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,53,Transportation and Material Moving,53,day_review_sensitivity,177,1,48,50,78,0,1195,2779,177,177,0,0,ready,ready,0
+2024,other_reported_mechanism,Other reported mechanism,6,unknown,Unknown occupation,99,day_review_sensitivity,109,1,42,10,56,0,1600,567,109,109,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,13,Business and Financial Operations,13,day_review_sensitivity,60,0,46,10,4,0,2773,572,60,60,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,29,Healthcare Practitioners and Technical,29,day_review_sensitivity,1,0,0,1,0,0,0,8,1,1,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,33,Protective Service,33,day_review_sensitivity,2,0,1,1,0,0,40,22,2,2,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,37,Building and Grounds Cleaning and Maintenance,37,day_review_sensitivity,12,0,10,1,1,0,791,76,12,12,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,41,Sales and Related,41,day_review_sensitivity,6,0,4,2,0,0,85,216,6,6,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,43,Office and Administrative Support,43,day_review_sensitivity,47,0,21,15,11,0,997,746,47,47,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,47,Construction and Extraction,47,day_review_sensitivity,1,0,0,1,0,0,0,43,1,1,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,49,"Installation, Maintenance, and Repair",49,day_review_sensitivity,5,0,0,4,1,0,0,84,5,5,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,51,Production,51,day_review_sensitivity,5,0,3,1,1,0,96,176,5,5,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,53,Transportation and Material Moving,53,day_review_sensitivity,1585,0,550,881,154,0,16811,51275,1585,1585,0,0,ready,ready,0
+2024,unknown_missing_mechanism,Unknown / missing mechanism,7,unknown,Unknown occupation,99,day_review_sensitivity,592,0,270,230,92,0,11204,13855,592,592,0,0,ready,ready,0
