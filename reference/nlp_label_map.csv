@@ -1,0 +1,52 @@
+source_year,event_code_raw,source_title,proposed_label,candidate_rows,disposition,mapping_version
+2023,11,Intentional injury by person,,73,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2023,12,Injury by person--unintentional or intent unknown,,44,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2023,13,Animal and insect related incidents,,194,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2023,22,Rail vehicle incidents,transportation,1,included_broad_class,safeshift-broad-event-5-v1
+2023,23,Animal and other non-motorized vehicle transportation incidents,transportation,5,included_broad_class,safeshift-broad-event-5-v1
+2023,24,Pedestrian vehicular incidents,transportation,362,included_broad_class,safeshift-broad-event-5-v1
+2023,26,Roadway incidents involving motorized land vehicle,transportation,255,included_broad_class,safeshift-broad-event-5-v1
+2023,27,Nonroadway incidents involving motorized land vehicles,transportation,1412,included_broad_class,safeshift-broad-event-5-v1
+2023,31,Fires,,3,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2023,32,Explosions,,3,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2023,41,Slip or trip without fall,falls_slips_trips,1328,included_broad_class,safeshift-broad-event-5-v1
+2023,42,Falls on same level,falls_slips_trips,4758,included_broad_class,safeshift-broad-event-5-v1
+2023,43,Falls to lower level,falls_slips_trips,1019,included_broad_class,safeshift-broad-event-5-v1
+2023,44,Jumps to lower level,falls_slips_trips,66,included_broad_class,safeshift-broad-event-5-v1
+2023,51,Exposure to electricity,harmful_exposure,52,included_broad_class,safeshift-broad-event-5-v1
+2023,52,Exposure to radiation and noise,harmful_exposure,34,included_broad_class,safeshift-broad-event-5-v1
+2023,53,Exposure to temperature extremes,harmful_exposure,162,included_broad_class,safeshift-broad-event-5-v1
+2023,55,Exposure to other harmful substances,harmful_exposure,749,included_broad_class,safeshift-broad-event-5-v1
+2023,62,Struck by object or equipment,object_equipment_contact,8243,included_broad_class,safeshift-broad-event-5-v1
+2023,63,Struck against object or equipment,object_equipment_contact,3777,included_broad_class,safeshift-broad-event-5-v1
+2023,64,Caught in or compressed by equipment or objects,object_equipment_contact,1707,included_broad_class,safeshift-broad-event-5-v1
+2023,65,"Struck, caught, or crushed in collapsing structure, equipment, or material",object_equipment_contact,1,included_broad_class,safeshift-broad-event-5-v1
+2023,66,Rubbed or abraded by friction or pressure,object_equipment_contact,755,included_broad_class,safeshift-broad-event-5-v1
+2023,67,"Rubbed, abraded, or jarred by vibration",object_equipment_contact,27,included_broad_class,safeshift-broad-event-5-v1
+2023,71,Overexertion involving outside sources,overexertion_bodily_reaction,22990,included_broad_class,safeshift-broad-event-5-v1
+2023,72,Repetitive motions involving microtasks,overexertion_bodily_reaction,3117,included_broad_class,safeshift-broad-event-5-v1
+2023,73,Other exertions or bodily reactions,overexertion_bodily_reaction,6341,included_broad_class,safeshift-broad-event-5-v1
+2024,11,Violent acts by other person,,54,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2024,12,Intentional self-harm,,2,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2024,23,Rail vehicle incidents,transportation,1,included_broad_class,safeshift-broad-event-5-v1
+2024,24,Non-motorized transport incidents,transportation,2,included_broad_class,safeshift-broad-event-5-v1
+2024,25,Pedestrian incidents involving motorized land vehicles,transportation,190,included_broad_class,safeshift-broad-event-5-v1
+2024,26,Roadway incidents involving motorized land vehicle,transportation,248,included_broad_class,safeshift-broad-event-5-v1
+2024,27,Nonroadway incidents involving motorized land vehicles,transportation,1011,included_broad_class,safeshift-broad-event-5-v1
+2024,31,Explosions,,7,outside_initial_five_class_scope,safeshift-broad-event-5-v1
+2024,41,Fall to lower level,falls_slips_trips,530,included_broad_class,safeshift-broad-event-5-v1
+2024,43,"Slip, trip, stumble or fall on same level",falls_slips_trips,5457,included_broad_class,safeshift-broad-event-5-v1
+2024,51,Exposure to electricity,harmful_exposure,52,included_broad_class,safeshift-broad-event-5-v1
+2024,52,Exposure to radiation and noise,harmful_exposure,41,included_broad_class,safeshift-broad-event-5-v1
+2024,53,Exposure to temperature extremes,harmful_exposure,135,included_broad_class,safeshift-broad-event-5-v1
+2024,55,Exposure to harmful substances,harmful_exposure,566,included_broad_class,safeshift-broad-event-5-v1
+2024,57,Exposure to stressful environment without other event,,22,new_stressful_environment_group_no_observed_2023_counterpart,safeshift-broad-event-5-v1
+2024,61,"Contact with other person, nonviolent or intent unknown",,51,person_or_animal_event_moved_from_old_division_1,safeshift-broad-event-5-v1
+2024,62,Contact with animals,,190,person_or_animal_event_moved_from_old_division_1,safeshift-broad-event-5-v1
+2024,63,"Collapse, engulfment",object_equipment_contact,12,included_broad_class,safeshift-broad-event-5-v1
+2024,64,"Struck by propelled, falling, or suspended object",object_equipment_contact,4833,included_broad_class,safeshift-broad-event-5-v1
+2024,65,"Struck, caught, or compressed by running powered equipment",object_equipment_contact,1054,included_broad_class,safeshift-broad-event-5-v1
+2024,66,Contact with non-running objects or equipment,object_equipment_contact,8051,included_broad_class,safeshift-broad-event-5-v1
+2024,71,Overexertion while moving or manipulating external object(s),overexertion_bodily_reaction,23855,included_broad_class,safeshift-broad-event-5-v1
+2024,72,Repetitive microtasks,overexertion_bodily_reaction,2366,included_broad_class,safeshift-broad-event-5-v1
+2024,73,Bodily position and motion,overexertion_bodily_reaction,5521,included_broad_class,safeshift-broad-event-5-v1
