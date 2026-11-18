@@ -1,0 +1,29 @@
+mechanism_label	scenario	year	Case reports	Days-away denominator (reports with valid value)	Days-away numerator	QA mean days away x 1e9 (integer)	QA mean restricted days x 1e9 (integer)	QA percent of reports x 1e9 (integer)	Restricted days denominator (reports with valid value)	Restricted days numerator
+Contact with objects/equipment	day_review_sensitivity	2023	14,434	14,434	150,187	10,405,085,215	22,118,678,121	248,262,814	14,434	319,261
+Contact with objects/equipment	day_review_sensitivity	2024	13,903	13,903	135,691	9,759,836,007	22,570,020,859	246,936,166	13,903	313,791
+Contact with objects/equipment	primary	2023	14,505	14,505	159,144	10,971,664,943	22,504,515,684	247,504,479	14,505	326,428
+Contact with objects/equipment	primary	2024	13,947	13,947	140,124	10,046,891,805	22,906,144,691	246,548,463	13,947	319,472
+Falls, slips, trips	day_review_sensitivity	2023	7,086	7,086	133,237	18,802,850,692	30,209,850,409	121,878,225	7,086	214,067
+Falls, slips, trips	day_review_sensitivity	2024	5,927	5,927	106,783	18,016,365,784	30,625,442,888	105,271,571	5,927	181,517
+Falls, slips, trips	primary	2023	7,167	7,167	145,029	20,235,663,458	30,860,053,021	122,293,320	7,167	221,174
+Falls, slips, trips	primary	2024	5,985	5,985	113,442	18,954,385,965	31,482,706,767	105,799,996	5,985	188,424
+Harmful exposure	day_review_sensitivity	2023	997	997	5,774	5,791,374,122	7,422,266,800	17,148,263	997	7,400
+Harmful exposure	day_review_sensitivity	2024	792	792	3,304	4,171,717,172	7,643,939,394	14,066,996	792	6,054
+Harmful exposure	primary	2023	997	997	5,774	5,791,374,122	7,422,266,800	17,012,200	997	7,400
+Harmful exposure	primary	2024	794	794	3,360	4,231,738,035	8,078,085,642	14,035,956	794	6,414
+Other reported mechanism	day_review_sensitivity	2023	315	315	2,452	7,784,126,984	12,485,714,286	5,417,957	315	3,933
+Other reported mechanism	day_review_sensitivity	2024	326	326	3,561	10,923,312,883	11,113,496,933	5,790,203	326	3,623
+Other reported mechanism	primary	2023	317	317	2,699	8,514,195,584	12,974,763,407	5,409,095	317	4,113
+Other reported mechanism	primary	2024	326	326	3,561	10,923,312,883	11,113,496,933	5,762,874	326	3,623
+Overexertion / bodily reaction	day_review_sensitivity	2023	32,187	32,187	341,860	10,621,058,191	41,227,731,693	553,611,971	32,187	1,326,997
+Overexertion / bodily reaction	day_review_sensitivity	2024	31,600	31,600	299,323	9,472,246,835	40,970,696,203	561,258,925	31,600	1,294,674
+Overexertion / bodily reaction	primary	2023	32,445	32,445	373,814	11,521,467,098	41,784,558,484	553,621,705	32,445	1,355,700
+Overexertion / bodily reaction	primary	2024	31,739	31,739	310,412	9,780,144,302	41,414,253,757	561,067,016	31,739	1,314,447
+Transportation incidents	day_review_sensitivity	2023	1,987	1,987	55,420	27,891,293,407	19,119,275,289	34,176,127	1,987	37,990
+Transportation incidents	day_review_sensitivity	2024	1,438	1,438	43,653	30,356,745,480	19,164,812,239	25,540,833	1,438	27,559
+Transportation incidents	primary	2023	2,034	2,034	64,655	31,787,118,977	19,866,764,995	34,706,936	2,034	40,409
+Transportation incidents	primary	2024	1,451	1,451	44,884	30,933,149,552	19,989,662,302	25,650,091	1,451	29,005
+Unknown / missing mechanism	day_review_sensitivity	2023	1,134	1,134	12,549	11,066,137,566	31,313,051,146	19,504,644	1,134	35,509
+Unknown / missing mechanism	day_review_sensitivity	2024	2,316	2,316	32,797	14,161,053,541	28,960,708,117	41,135,306	2,316	67,073
+Unknown / missing mechanism	primary	2023	1,140	1,140	13,412	11,764,912,281	31,641,228,070	19,452,265	1,140	36,071
+Unknown / missing mechanism	primary	2024	2,327	2,327	34,119	14,662,226,042	29,356,682,424	41,135,604	2,327	68,313

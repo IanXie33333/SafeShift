@@ -1,0 +1,5 @@
+scenario	year	Case reports	Days-away denominator (reports with valid value)	Days-away numerator	QA mean days away x 1e9 (integer)	QA mean restricted days x 1e9 (integer)	Restricted days denominator (reports with valid value)	Restricted days numerator
+day_review_sensitivity	2023	58,140	58,140	701,479	12,065,342,277	33,456,432,749	58,140	1,945,157
+day_review_sensitivity	2024	56,302	56,302	625,112	11,102,838,265	33,645,181,343	56,302	1,894,291
+primary	2023	58,605	58,605	764,527	13,045,422,745	33,978,244,177	58,605	1,991,295
+primary	2024	56,569	56,569	649,902	11,488,659,867	34,112,287,649	56,569	1,929,698
